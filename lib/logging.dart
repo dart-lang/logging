@@ -278,7 +278,7 @@ class Level implements Comparable<Level> {
   static const List<Level> LEVELS = const
       [ALL, FINEST, FINER, FINE, CONFIG, INFO, WARNING, SEVERE, SHOUT, OFF];
 
-  bool operator ==(Object other) => other is Level && value == other.value;
+  bool operator ==(other) => other is Level && value == other.value;
   bool operator <(Level other) => value < other.value;
   bool operator <=(Level other) => value <= other.value;
   bool operator >(Level other) => value > other.value;
