@@ -5,6 +5,8 @@
 
 library logging_test;
 
+import 'dart:async';
+
 import 'package:logging/logging.dart';
 import 'package:unittest/unittest.dart';
 
@@ -148,6 +150,53 @@ main() {
     expect(shout.message, 'shout');
     expect(shout.error, isNull);
     expect(shout.stackTrace, isNull);
+  });
+
+  group('zone gets recorded to LogRecord', () {
+    test('root zone', () {
+      var root = Logger.root;
+
+      var recordingZone = Zone.current;
+      var records = new List<LogRecord>();
+      root.onRecord.listen(records.add);
+      root.info('hello');
+
+      expect(records, hasLength(1));
+      expect(records.first.zone, equals(recordingZone));
+    });
+
+    test('child zone', () {
+      var root = Logger.root;
+
+      var recordingZone;
+      var records = new List<LogRecord>();
+      root.onRecord.listen(records.add);
+
+      runZoned(() {
+        recordingZone = Zone.current;
+        root.info('hello');
+      });
+
+      expect(records, hasLength(1));
+      expect(records.first.zone, equals(recordingZone));
+    });
+
+    test('custom zone', () {
+      var root = Logger.root;
+
+      var recordingZone;
+      var records = new List<LogRecord>();
+      root.onRecord.listen(records.add);
+
+      runZoned(() {
+        recordingZone = Zone.current;
+      });
+
+      runZoned(() => root.log(Level.INFO, 'hello', null, null, recordingZone));
+
+      expect(records, hasLength(1));
+      expect(records.first.zone, equals(recordingZone));
+    });
   });
 
   group('mutating levels', () {
