@@ -2,7 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-
 library logging_test;
 
 import 'dart:async';
@@ -42,9 +41,17 @@ main() {
 
   test('levels are comparable', () {
     final unsorted = [
-        Level.INFO, Level.CONFIG, Level.FINE, Level.SHOUT, Level.OFF,
-        Level.FINER, Level.ALL, Level.WARNING, Level.FINEST,  Level.SEVERE,
-      ];
+      Level.INFO,
+      Level.CONFIG,
+      Level.FINE,
+      Level.SHOUT,
+      Level.OFF,
+      Level.FINER,
+      Level.ALL,
+      Level.WARNING,
+      Level.FINEST,
+      Level.SEVERE,
+    ];
 
     final sorted = Level.LEVELS;
 
@@ -112,7 +119,7 @@ main() {
     expect(loggerA.children['b'], same(loggerAB), reason: 'can read Children');
 
     expect(() {
-        loggerAB.children['test'] = null;
+      loggerAB.children['test'] = null;
     }, throwsUnsupportedError, reason: 'Children is read-only');
   });
 
@@ -125,7 +132,7 @@ main() {
 
     try {
       throw new UnsupportedError('test exception');
-    } catch(error, stack) {
+    } catch (error, stack) {
       Logger.root.log(Level.SEVERE, 'severe', error, stack);
       Logger.root.warning('warning', error, stack);
     }
@@ -226,7 +233,9 @@ main() {
     });
 
     test('cannot set level if hierarchy is disabled', () {
-      expect(() {a.level = Level.FINE;}, throwsUnsupportedError);
+      expect(() {
+        a.level = Level.FINE;
+      }, throwsUnsupportedError);
     });
 
     test('loggers effective level - no hierarchy', () {
@@ -273,7 +282,9 @@ main() {
 
     test('add/remove handlers - no hierarchy', () {
       int calls = 0;
-      var handler = (_) { calls++; };
+      var handler = (_) {
+        calls++;
+      };
       final sub = c.onRecord.listen(handler);
       root.info("foo");
       root.info("foo");
@@ -286,7 +297,9 @@ main() {
     test('add/remove handlers - with hierarchy', () {
       hierarchicalLoggingEnabled = true;
       int calls = 0;
-      var handler = (_) { calls++; };
+      var handler = (_) {
+        calls++;
+      };
       c.onRecord.listen(handler);
       root.info("foo");
       root.info("foo");
@@ -317,7 +330,8 @@ main() {
         'INFO: 5',
         'WARNING: 6',
         'SEVERE: 7',
-        'SHOUT: 8']));
+        'SHOUT: 8'
+      ]));
     });
 
     test('logging methods store exception', () {
@@ -360,7 +374,8 @@ main() {
         'INFO: 5 e',
         'WARNING: 6 f',
         'SEVERE: 7 g',
-        'SHOUT: 8 h']));
+        'SHOUT: 8 h'
+      ]));
     });
 
     test('message logging - no hierarchy', () {
@@ -392,16 +407,17 @@ main() {
       c.shout('10');
 
       expect(rootMessages, equals([
-            // 'INFO: 1' is not loggable
-            // 'FINE: 2' is not loggable
-            'SHOUT: 3',
-            // 'INFO: 4' is not loggable
-            'SEVERE: 5',
-            'WARNING: 6',
-            // 'FINE: 7' is not loggable
-            // 'FINE: 8' is not loggable
-            'WARNING: 9',
-            'SHOUT: 10']));
+        // 'INFO: 1' is not loggable
+        // 'FINE: 2' is not loggable
+        'SHOUT: 3',
+        // 'INFO: 4' is not loggable
+        'SEVERE: 5',
+        'WARNING: 6',
+        // 'FINE: 7' is not loggable
+        // 'FINE: 8' is not loggable
+        'WARNING: 9',
+        'SHOUT: 10'
+      ]));
 
       // no hierarchy means we all hear the same thing.
       expect(aMessages, equals(rootMessages));
@@ -440,32 +456,35 @@ main() {
       c.shout('10');
 
       expect(rootMessages, equals([
-            'INFO: 1',
-            // 'FINE: 2' is not loggable
-            'SHOUT: 3',
-            // 'INFO: 4' is not loggable
-            'SEVERE: 5',
-            'WARNING: 6',
-            // 'FINE: 7' is not loggable
-            // 'FINE: 8' is not loggable
-            'WARNING: 9',
-            'SHOUT: 10']));
+        'INFO: 1',
+        // 'FINE: 2' is not loggable
+        'SHOUT: 3',
+        // 'INFO: 4' is not loggable
+        'SEVERE: 5',
+        'WARNING: 6',
+        // 'FINE: 7' is not loggable
+        // 'FINE: 8' is not loggable
+        'WARNING: 9',
+        'SHOUT: 10'
+      ]));
 
       expect(aMessages, equals([
-            // 1,2 and 3 are lower in the hierarchy
-            // 'INFO: 4' is not loggable
-            'SEVERE: 5',
-            'WARNING: 6',
-            // 'FINE: 7' is not loggable
-            // 'FINE: 8' is not loggable
-            'WARNING: 9',
-            'SHOUT: 10']));
+        // 1,2 and 3 are lower in the hierarchy
+        // 'INFO: 4' is not loggable
+        'SEVERE: 5',
+        'WARNING: 6',
+        // 'FINE: 7' is not loggable
+        // 'FINE: 8' is not loggable
+        'WARNING: 9',
+        'SHOUT: 10'
+      ]));
 
       expect(cMessages, equals([
-            // 1 - 7 are lower in the hierarchy
-            // 'FINE: 8' is not loggable
-            'WARNING: 9',
-            'SHOUT: 10']));
+        // 1 - 7 are lower in the hierarchy
+        // 'FINE: 8' is not loggable
+        'WARNING: 9',
+        'SHOUT: 10'
+      ]));
     });
 
     test('message logging - lazy functions', () {
@@ -479,12 +498,10 @@ main() {
       var myClosure = () => "${++callCount}";
 
       root.info(myClosure);
-      root.finer(myClosure);  // Should not get evaluated.
+      root.finer(myClosure); // Should not get evaluated.
       root.warning(myClosure);
 
-      expect(messages, equals([
-          'INFO: 1',
-          'WARNING: 2',]));
+      expect(messages, equals(['INFO: 1', 'WARNING: 2',]));
     });
 
     test('message logging - calls toString', () {
@@ -499,11 +516,8 @@ main() {
       root.info([1, 2, 3]);
       root.info(() => 10);
 
-      expect(messages, equals([
-          'INFO: 5',
-          'INFO: false',
-          'INFO: [1, 2, 3]',
-          'INFO: 10',]));
+      expect(messages,
+          equals(['INFO: 5', 'INFO: false', 'INFO: [1, 2, 3]', 'INFO: 10',]));
     });
   });
 }

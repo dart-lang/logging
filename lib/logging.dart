@@ -21,7 +21,6 @@ bool hierarchicalLoggingEnabled = false;
  */
 Level _rootLevel = Level.INFO;
 
-
 /**
  * Use a [Logger] to log debug messages. [Logger]s are named using a
  * hierarchical dot-separated name convention.
@@ -74,9 +73,9 @@ class Logger {
     return new Logger._internal(thisName, parent, new Map<String, Logger>());
   }
 
-  Logger._internal(this.name, this.parent, Map<String, Logger> children) :
-    this._children = children,
-    this.children = new UnmodifiableMapView(children) {
+  Logger._internal(this.name, this.parent, Map<String, Logger> children)
+      : this._children = children,
+        this.children = new UnmodifiableMapView(children) {
     if (parent != null) parent._children[name] = this;
   }
 
@@ -145,9 +144,8 @@ class Logger {
    * different zones differently (e.g. group log records by http-request if each
    * http-request handler runs in it's own zone).
    */
-  void log(Level logLevel,
-           message,
-           [Object error, StackTrace stackTrace, Zone zone]) {
+  void log(Level logLevel, message,
+      [Object error, StackTrace stackTrace, Zone zone]) {
     if (isLoggable(logLevel)) {
       // If message is a Function, evaluate it.
       if (message is Function) message = message();
@@ -156,8 +154,8 @@ class Logger {
       // Only record the current zone if it was not given.
       if (zone == null) zone = Zone.current;
 
-      var record = new LogRecord(logLevel, message, fullName, error,
-          stackTrace, zone);
+      var record =
+          new LogRecord(logLevel, message, fullName, error, stackTrace, zone);
 
       if (hierarchicalLoggingEnabled) {
         var target = this;
@@ -227,7 +225,6 @@ class Logger {
   static final Map<String, Logger> _loggers = <String, Logger>{};
 }
 
-
 /** Handler callback to process log entries as they are added to a [Logger]. */
 typedef void LoggerHandler(LogRecord);
 
@@ -244,7 +241,6 @@ typedef void LoggerHandler(LogRecord);
  * [Level.OFF].
  */
 class Level implements Comparable<Level> {
-
   final String name;
 
   /**
@@ -285,8 +281,18 @@ class Level implements Comparable<Level> {
   /** Key for extra debugging loudness ([value] = 1200). */
   static const Level SHOUT = const Level('SHOUT', 1200);
 
-  static const List<Level> LEVELS = const
-      [ALL, FINEST, FINER, FINE, CONFIG, INFO, WARNING, SEVERE, SHOUT, OFF];
+  static const List<Level> LEVELS = const [
+    ALL,
+    FINEST,
+    FINER,
+    FINE,
+    CONFIG,
+    INFO,
+    WARNING,
+    SEVERE,
+    SHOUT,
+    OFF
+  ];
 
   bool operator ==(other) => other is Level && value == other.value;
   bool operator <(Level other) => value < other.value;
@@ -297,7 +303,6 @@ class Level implements Comparable<Level> {
   int get hashCode => value;
   String toString() => name;
 }
-
 
 /**
  * A log entry representation used to propagate information from [Logger] to
@@ -327,9 +332,8 @@ class LogRecord {
   /** Zone of the calling code which resulted in this LogRecord. */
   final Zone zone;
 
-  LogRecord(this.level, this.message, this.loggerName, [this.error,
-                                                        this.stackTrace,
-                                                        this.zone])
+  LogRecord(this.level, this.message, this.loggerName,
+      [this.error, this.stackTrace, this.zone])
       : time = new DateTime.now(),
         sequenceNumber = LogRecord._nextNumber++;
 
