@@ -1,3 +1,7 @@
+## 0.10.0
+
+* Change type of `stackTrace` from `StackTrace` to `Object`.
+
 ## 0.9.3
 
 * Added optional `LogRecord.zone` field.
