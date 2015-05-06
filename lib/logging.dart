@@ -147,7 +147,7 @@ class Logger {
    */
   void log(Level logLevel,
            message,
-           [Object error, Object stackTrace, Zone zone]) {
+           [Object error, StackTrace stackTrace, Zone zone]) {
     if (isLoggable(logLevel)) {
       // If message is a Function, evaluate it.
       if (message is Function) message = message();
@@ -172,35 +172,35 @@ class Logger {
   }
 
   /** Log message at level [Level.FINEST]. */
-  void finest(message, [Object error, Object stackTrace]) =>
+  void finest(message, [Object error, StackTrace stackTrace]) =>
       log(Level.FINEST, message, error, stackTrace);
 
   /** Log message at level [Level.FINER]. */
-  void finer(message, [Object error, Object stackTrace]) =>
+  void finer(message, [Object error, StackTrace stackTrace]) =>
       log(Level.FINER, message, error, stackTrace);
 
   /** Log message at level [Level.FINE]. */
-  void fine(message, [Object error, Object stackTrace]) =>
+  void fine(message, [Object error, StackTrace stackTrace]) =>
       log(Level.FINE, message, error, stackTrace);
 
   /** Log message at level [Level.CONFIG]. */
-  void config(message, [Object error, Object stackTrace]) =>
+  void config(message, [Object error, StackTrace stackTrace]) =>
       log(Level.CONFIG, message, error, stackTrace);
 
   /** Log message at level [Level.INFO]. */
-  void info(message, [Object error, Object stackTrace]) =>
+  void info(message, [Object error, StackTrace stackTrace]) =>
       log(Level.INFO, message, error, stackTrace);
 
   /** Log message at level [Level.WARNING]. */
-  void warning(message, [Object error, Object stackTrace]) =>
+  void warning(message, [Object error, StackTrace stackTrace]) =>
       log(Level.WARNING, message, error, stackTrace);
 
   /** Log message at level [Level.SEVERE]. */
-  void severe(message, [Object error, Object stackTrace]) =>
+  void severe(message, [Object error, StackTrace stackTrace]) =>
       log(Level.SEVERE, message, error, stackTrace);
 
   /** Log message at level [Level.SHOUT]. */
-  void shout(message, [Object error, Object stackTrace]) =>
+  void shout(message, [Object error, StackTrace stackTrace]) =>
       log(Level.SHOUT, message, error, stackTrace);
 
   Stream<LogRecord> _getStream() {
@@ -322,7 +322,7 @@ class LogRecord {
   final Object error;
 
   /** Associated stackTrace (if any) when recording errors messages. */
-  final Object stackTrace;
+  final StackTrace stackTrace;
 
   /** Zone of the calling code which resulted in this LogRecord. */
   final Zone zone;
