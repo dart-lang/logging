@@ -7,9 +7,9 @@ library logging_test;
 import 'dart:async';
 
 import 'package:logging/logging.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
-main() {
+void main() {
   test('level comparison is a valid comparator', () {
     var level1 = const Level('NOT_REAL1', 253);
     expect(level1 == level1, isTrue);
