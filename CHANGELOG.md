@@ -1,3 +1,8 @@
+## 0.11.1
+
+* Add support for automatically logging the stack trace on error messages. Note
+  this can be expensive, so it is off by default.
+
 ## 0.11.0
 
 * Revert change in `0.10.0`. `stackTrace` must be an instance of `StackTrace`.

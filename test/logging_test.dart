@@ -520,4 +520,54 @@ void main() {
           equals(['INFO: 5', 'INFO: false', 'INFO: [1, 2, 3]', 'INFO: 10',]));
     });
   });
+
+  group('recordStackTraceAtLevel', () {
+    var root = Logger.root;
+    tearDown(() {
+      recordStackTraceAtLevel = Level.OFF;
+      root.clearListeners();
+    });
+
+    test('no stack trace by default', () {
+      var records = new List<LogRecord>();
+      root.onRecord.listen(records.add);
+      root.severe('hello');
+      root.warning('hello');
+      root.info('hello');
+      expect(records, hasLength(3));
+      expect(records[0].stackTrace, isNull);
+      expect(records[1].stackTrace, isNull);
+      expect(records[2].stackTrace, isNull);
+    });
+
+    test('trace recorded only on requested levels', () {
+      var records = new List<LogRecord>();
+      recordStackTraceAtLevel = Level.WARNING;
+      root.onRecord.listen(records.add);
+      root.severe('hello');
+      root.warning('hello');
+      root.info('hello');
+      expect(records, hasLength(3));
+      expect(records[0].stackTrace, isNotNull);
+      expect(records[1].stackTrace, isNotNull);
+      expect(records[2].stackTrace, isNull);
+    });
+
+    test('provided trace is used if given', () {
+      var trace;
+      try {
+        throw 'trace';
+      } catch(e, t) {
+        trace = t;
+      }
+      var records = new List<LogRecord>();
+      recordStackTraceAtLevel = Level.WARNING;
+      root.onRecord.listen(records.add);
+      root.severe('hello');
+      root.warning('hello', 'a', trace);
+      expect(records, hasLength(2));
+      expect(records[0].stackTrace, isNot(equals(trace)));
+      expect(records[1].stackTrace, trace);
+    });
+  });
 }
