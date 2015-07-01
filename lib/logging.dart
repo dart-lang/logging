@@ -229,7 +229,7 @@ class Logger {
   }
 
   /** Top-level root [Logger]. */
-  static Logger get root => new Logger('');
+  static final Logger root = new Logger('');
 
   /** All [Logger]s in the system. */
   static final Map<String, Logger> _loggers = <String, Logger>{};
