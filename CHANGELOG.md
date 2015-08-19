@@ -1,3 +1,7 @@
+## 0.11.1+1
+
+* Include default error with the auto-generated stack traces.
+
 ## 0.11.1
 
 * Add support for automatically logging the stack trace on error messages. Note

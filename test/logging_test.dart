@@ -569,5 +569,18 @@ void main() {
       expect(records[0].stackTrace, isNot(equals(trace)));
       expect(records[1].stackTrace, trace);
     });
+
+    test('error also generated when generating a trace', () {
+      var records = new List<LogRecord>();
+      recordStackTraceAtLevel = Level.WARNING;
+      root.onRecord.listen(records.add);
+      root.severe('hello');
+      root.warning('hello');
+      root.info('hello');
+      expect(records, hasLength(3));
+      expect(records[0].error, isNotNull);
+      expect(records[1].error, isNotNull);
+      expect(records[2].error, isNull);
+    });
   });
 }
