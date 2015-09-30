@@ -61,6 +61,18 @@ class Logger {
     return _loggers.putIfAbsent(name, () => new Logger._named(name));
   }
 
+  /// Creates a new detached [Logger].
+  ///
+  /// Returns a new [Logger] instance (unlike [new Logger], which returns a
+  /// [Logger] singleton), which doesn't have any parent or children,
+  /// and it's not a part of the global hierarchial loggers structure.
+  ///
+  /// It can be useful when you just need a local short-living logger,
+  /// which you'd like to be garbage-collected later.
+  factory Logger.detached(String name) {
+    return new Logger._internal(name, null, new Map<String, Logger>());
+  }
+
   factory Logger._named(String name) {
     if (name.startsWith('.')) {
       throw new ArgumentError("name shouldn't start with a '.'");
