@@ -63,7 +63,7 @@ class Logger {
 
   /// Creates a new detached [Logger].
   ///
-  /// Returns a new [Logger] instance (unlike [new Logger], which returns a
+  /// Returns a new [Logger] instance (unlike `new Logger`, which returns a
   /// [Logger] singleton), which doesn't have any parent or children,
   /// and it's not a part of the global hierarchial loggers structure.
   ///

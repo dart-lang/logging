@@ -1,3 +1,8 @@
+## 0.11.2
+
+* Added Logger.detached - a convinience factory to obtain a logger that is not
+  attached to this library's logger hierarchy.
+
 ## 0.11.1+1
 
 * Include default error with the auto-generated stack traces.
