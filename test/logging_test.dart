@@ -529,17 +529,28 @@ void main() {
     test('message logging - calls toString', () {
       root.level = Level.INFO;
       var messages = [];
+      var objects = [];
+      var object = new Object();
       root.onRecord.listen((record) {
         messages.add('${record.level}: ${record.message}');
+        objects.add(record.object);
       });
 
       root.info(5);
       root.info(false);
       root.info([1, 2, 3]);
       root.info(() => 10);
+      root.info(object);
 
-      expect(messages,
-          equals(['INFO: 5', 'INFO: false', 'INFO: [1, 2, 3]', 'INFO: 10',]));
+      expect(messages, equals([
+        'INFO: 5',
+        'INFO: false',
+        'INFO: [1, 2, 3]',
+        'INFO: 10',
+        "INFO: Instance of 'Object'"
+      ]));
+
+      expect(objects, [5, false, [1, 2, 3], 10, object]);
     });
   });
 
