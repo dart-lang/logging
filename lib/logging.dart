@@ -340,6 +340,8 @@ class Level implements Comparable<Level> {
 class LogRecord {
   final Level level;
   final String message;
+
+  /** Non-string message passed to Logger. */
   final Object object;
 
   /** Logger where this record is stored. */
