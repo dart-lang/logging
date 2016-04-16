@@ -1,6 +1,14 @@
+## 0.11.3
+
+* Added optional `LogRecord.object` field.
+
+* `Logger.log` sets `LogRecord.object` if the message is not a string or a
+  function that returns a string. So that a handler can access the original
+  object instead of just its `toString()`.
+
 ## 0.11.2
 
-* Added Logger.detached - a convinience factory to obtain a logger that is not
+* Added Logger.detached - a convenience factory to obtain a logger that is not
   attached to this library's logger hierarchy.
 
 ## 0.11.1+1
