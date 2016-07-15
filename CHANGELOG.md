@@ -1,3 +1,7 @@
+## 0.11.3+1
+
+* Fixed several documentation comments.
+
 ## 0.11.3
 
 * Added optional `LogRecord.object` field.

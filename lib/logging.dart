@@ -9,27 +9,27 @@ library logging;
 import 'dart:async';
 import 'dart:collection';
 
-/**
- * Whether to allow fine-grain logging and configuration of loggers in a
- * hierarchy. When false, all logging is merged in the root logger.
- */
+/// Whether to allow fine-grain logging and configuration of loggers in a
+/// hierarchy.
+///
+/// When false, all logging is merged in the root logger.
 bool hierarchicalLoggingEnabled = false;
 
-/**
- * Automatically record stack traces for any message of this level or above.
- * Because this is expensive, this is off by default.
- */
+/// Automatically record stack traces for any message of this level or above.
+///
+/// Because this is expensive, this is off by default.
 Level recordStackTraceAtLevel = Level.OFF;
 
-/**
- * Level for the root-logger. This will be the level of all loggers if
- * [hierarchicalLoggingEnabled] is false.
- */
+/// Level for the root-logger.
+///
+/// This will be the level of all loggers if [hierarchicalLoggingEnabled] is
+/// false.
 Level _rootLevel = Level.INFO;
 
 /**
- * Use a [Logger] to log debug messages. [Logger]s are named using a
- * hierarchical dot-separated name convention.
+ * Use a [Logger] to log debug messages.
+ *
+ * [Logger]s are named using a hierarchical dot-separated name convention.
  */
 class Logger {
   /** Simple name of this logger. */
@@ -65,7 +65,7 @@ class Logger {
   ///
   /// Returns a new [Logger] instance (unlike `new Logger`, which returns a
   /// [Logger] singleton), which doesn't have any parent or children,
-  /// and it's not a part of the global hierarchial loggers structure.
+  /// and is not a part of the global hierarchical loggers structure.
   ///
   /// It can be useful when you just need a local short-living logger,
   /// which you'd like to be garbage-collected later.
@@ -123,11 +123,13 @@ class Logger {
     }
   }
 
-  /**
-   * Returns an stream of messages added to this [Logger]. You can listen for
-   * messages using the standard stream APIs, for instance:
-   *    logger.onRecord.listen((record) { ... });
-   */
+  /// Returns a stream of messages added to this [Logger].
+  ///
+  /// You can listen for messages using the standard stream APIs, for instance:
+  ///
+  /// ```dart
+  /// logger.onRecord.listen((record) { ... });
+  /// ```
   Stream<LogRecord> get onRecord => _getStream();
 
   void clearListeners() {
@@ -144,25 +146,23 @@ class Logger {
   /** Whether a message for [value]'s level is loggable in this logger. */
   bool isLoggable(Level value) => (value >= level);
 
-  /**
-   * Adds a log record for a [message] at a particular [logLevel] if
-   * `isLoggable(logLevel)` is true.
-   *
-   * Use this method to create log entries for user-defined levels. To record a
-   * message at a predefined level (e.g. [Level.INFO], [Level.WARNING], etc) you
-   * can use their specialized methods instead (e.g. [info], [warning], etc).
-   *
-   * If [message] is a [Function], it will be lazy evaluated. Additionally, if
-   * [message] or its evaluated value is not a [String], then 'toString()' will
-   * be called on the object and the result will be logged. The log record will
-   * contain a field holding the original object.
-   *
-   * The log record will also contain a field for the zone in which this call
-   * was made.
-   * This can be advantagous if a log listener wants to handle records of
-   * different zones differently (e.g. group log records by http-request if each
-   * http-request handler runs in it's own zone).
-   */
+  /// Adds a log record for a [message] at a particular [logLevel] if
+  /// `isLoggable(logLevel)` is true.
+  ///
+  /// Use this method to create log entries for user-defined levels. To record a
+  /// message at a predefined level (e.g. [Level.INFO], [Level.WARNING], etc)
+  /// you can use their specialized methods instead (e.g. [info], [warning],
+  /// etc).
+  ///
+  /// If [message] is a [Function], it will be lazy evaluated. Additionally, if
+  /// [message] or its evaluated value is not a [String], then 'toString()' will
+  /// be called on the object and the result will be logged. The log record will
+  /// contain a field holding the original object.
+  ///
+  /// The log record will also contain a field for the zone in which this call
+  /// was made. This can be advantageous if a log listener wants to handler
+  /// records of different zones differently (e.g. group log records by HTTP
+  /// request if each HTTP request handler runs in it's own zone).
   void log(Level logLevel, message,
       [Object error, StackTrace stackTrace, Zone zone]) {
     Object object;
