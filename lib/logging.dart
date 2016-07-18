@@ -182,9 +182,8 @@ class Logger {
       }
       if (zone == null) zone = Zone.current;
 
-      var record =
-          new LogRecord(logLevel, message, fullName, error, stackTrace, zone,
-              object);
+      var record = new LogRecord(
+          logLevel, message, fullName, error, stackTrace, zone, object);
 
       if (hierarchicalLoggingEnabled) {
         var target = this;

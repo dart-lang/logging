@@ -344,16 +344,18 @@ void main() {
       root.severe('7');
       root.shout('8');
 
-      expect(rootMessages, equals([
-        'FINEST: 1',
-        'FINER: 2',
-        'FINE: 3',
-        'CONFIG: 4',
-        'INFO: 5',
-        'WARNING: 6',
-        'SEVERE: 7',
-        'SHOUT: 8'
-      ]));
+      expect(
+          rootMessages,
+          equals([
+            'FINEST: 1',
+            'FINER: 2',
+            'FINE: 3',
+            'CONFIG: 4',
+            'INFO: 5',
+            'WARNING: 6',
+            'SEVERE: 7',
+            'SHOUT: 8'
+          ]));
     });
 
     test('logging methods store exception', () {
@@ -380,24 +382,26 @@ void main() {
       root.severe('7', 'g');
       root.shout('8', 'h');
 
-      expect(rootMessages, equals([
-        'FINEST: 1 null',
-        'FINER: 2 null',
-        'FINE: 3 null',
-        'CONFIG: 4 null',
-        'INFO: 5 null',
-        'WARNING: 6 null',
-        'SEVERE: 7 null',
-        'SHOUT: 8 null',
-        'FINEST: 1 a',
-        'FINER: 2 b',
-        'FINE: 3 [c]',
-        'CONFIG: 4 d',
-        'INFO: 5 e',
-        'WARNING: 6 f',
-        'SEVERE: 7 g',
-        'SHOUT: 8 h'
-      ]));
+      expect(
+          rootMessages,
+          equals([
+            'FINEST: 1 null',
+            'FINER: 2 null',
+            'FINE: 3 null',
+            'CONFIG: 4 null',
+            'INFO: 5 null',
+            'WARNING: 6 null',
+            'SEVERE: 7 null',
+            'SHOUT: 8 null',
+            'FINEST: 1 a',
+            'FINER: 2 b',
+            'FINE: 3 [c]',
+            'CONFIG: 4 d',
+            'INFO: 5 e',
+            'WARNING: 6 f',
+            'SEVERE: 7 g',
+            'SHOUT: 8 h'
+          ]));
     });
 
     test('message logging - no hierarchy', () {
@@ -428,18 +432,20 @@ void main() {
       c.warning('9');
       c.shout('10');
 
-      expect(rootMessages, equals([
-        // 'INFO: 1' is not loggable
-        // 'FINE: 2' is not loggable
-        'SHOUT: 3',
-        // 'INFO: 4' is not loggable
-        'SEVERE: 5',
-        'WARNING: 6',
-        // 'FINE: 7' is not loggable
-        // 'FINE: 8' is not loggable
-        'WARNING: 9',
-        'SHOUT: 10'
-      ]));
+      expect(
+          rootMessages,
+          equals([
+            // 'INFO: 1' is not loggable
+            // 'FINE: 2' is not loggable
+            'SHOUT: 3',
+            // 'INFO: 4' is not loggable
+            'SEVERE: 5',
+            'WARNING: 6',
+            // 'FINE: 7' is not loggable
+            // 'FINE: 8' is not loggable
+            'WARNING: 9',
+            'SHOUT: 10'
+          ]));
 
       // no hierarchy means we all hear the same thing.
       expect(aMessages, equals(rootMessages));
@@ -477,36 +483,42 @@ void main() {
       c.warning('9');
       c.shout('10');
 
-      expect(rootMessages, equals([
-        'INFO: 1',
-        // 'FINE: 2' is not loggable
-        'SHOUT: 3',
-        // 'INFO: 4' is not loggable
-        'SEVERE: 5',
-        'WARNING: 6',
-        // 'FINE: 7' is not loggable
-        // 'FINE: 8' is not loggable
-        'WARNING: 9',
-        'SHOUT: 10'
-      ]));
+      expect(
+          rootMessages,
+          equals([
+            'INFO: 1',
+            // 'FINE: 2' is not loggable
+            'SHOUT: 3',
+            // 'INFO: 4' is not loggable
+            'SEVERE: 5',
+            'WARNING: 6',
+            // 'FINE: 7' is not loggable
+            // 'FINE: 8' is not loggable
+            'WARNING: 9',
+            'SHOUT: 10'
+          ]));
 
-      expect(aMessages, equals([
-        // 1,2 and 3 are lower in the hierarchy
-        // 'INFO: 4' is not loggable
-        'SEVERE: 5',
-        'WARNING: 6',
-        // 'FINE: 7' is not loggable
-        // 'FINE: 8' is not loggable
-        'WARNING: 9',
-        'SHOUT: 10'
-      ]));
+      expect(
+          aMessages,
+          equals([
+            // 1,2 and 3 are lower in the hierarchy
+            // 'INFO: 4' is not loggable
+            'SEVERE: 5',
+            'WARNING: 6',
+            // 'FINE: 7' is not loggable
+            // 'FINE: 8' is not loggable
+            'WARNING: 9',
+            'SHOUT: 10'
+          ]));
 
-      expect(cMessages, equals([
-        // 1 - 7 are lower in the hierarchy
-        // 'FINE: 8' is not loggable
-        'WARNING: 9',
-        'SHOUT: 10'
-      ]));
+      expect(
+          cMessages,
+          equals([
+            // 1 - 7 are lower in the hierarchy
+            // 'FINE: 8' is not loggable
+            'WARNING: 9',
+            'SHOUT: 10'
+          ]));
     });
 
     test('message logging - lazy functions', () {
@@ -542,15 +554,23 @@ void main() {
       root.info(() => 10);
       root.info(object);
 
-      expect(messages, equals([
-        'INFO: 5',
-        'INFO: false',
-        'INFO: [1, 2, 3]',
-        'INFO: 10',
-        "INFO: Instance of 'Object'"
-      ]));
+      expect(
+          messages,
+          equals([
+            'INFO: 5',
+            'INFO: false',
+            'INFO: [1, 2, 3]',
+            'INFO: 10',
+            "INFO: Instance of 'Object'"
+          ]));
 
-      expect(objects, [5, false, [1, 2, 3], 10, object]);
+      expect(objects, [
+        5,
+        false,
+        [1, 2, 3],
+        10,
+        object
+      ]);
     });
   });
 
@@ -590,7 +610,7 @@ void main() {
       var trace;
       try {
         throw 'trace';
-      } catch(e, t) {
+      } catch (e, t) {
         trace = t;
       }
       var records = new List<LogRecord>();
