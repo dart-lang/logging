@@ -207,23 +207,23 @@ void main() {
   });
 
   group('detached loggers', () {
-    test("create new instances of Logger", () {
-      Logger a1 = new Logger.detached("a");
-      Logger a2 = new Logger.detached("a");
-      Logger a = new Logger("a");
+    test('create new instances of Logger', () {
+      Logger a1 = new Logger.detached('a');
+      Logger a2 = new Logger.detached('a');
+      Logger a = new Logger('a');
 
       expect(a1, isNot(a2));
       expect(a1, isNot(a));
       expect(a2, isNot(a));
     });
 
-    test("parent is null", () {
-      Logger a = new Logger.detached("a");
+    test('parent is null', () {
+      Logger a = new Logger.detached('a');
       expect(a.parent, null);
     });
 
-    test("children is empty", () {
-      Logger a = new Logger.detached("a");
+    test('children is empty', () {
+      Logger a = new Logger.detached('a');
       expect(a.children, {});
     });
   });
@@ -309,11 +309,11 @@ void main() {
       }
 
       final sub = c.onRecord.listen(handler);
-      root.info("foo");
-      root.info("foo");
+      root.info('foo');
+      root.info('foo');
       expect(calls, equals(2));
       sub.cancel();
-      root.info("foo");
+      root.info('foo');
       expect(calls, equals(2));
     });
 
@@ -325,8 +325,8 @@ void main() {
       }
 
       c.onRecord.listen(handler);
-      root.info("foo");
-      root.info("foo");
+      root.info('foo');
+      root.info('foo');
       expect(calls, equals(0));
     });
 
@@ -531,7 +531,7 @@ void main() {
       });
 
       var callCount = 0;
-      var myClosure = () => "${++callCount}";
+      var myClosure = () => '${++callCount}';
 
       root.info(myClosure);
       root.finer(myClosure); // Should not get evaluated.
