@@ -535,7 +535,12 @@ void main() {
       root.finer(myClosure); // Should not get evaluated.
       root.warning(myClosure);
 
-      expect(messages, equals(['INFO: 1', 'WARNING: 2',]));
+      expect(
+          messages,
+          equals([
+            'INFO: 1',
+            'WARNING: 2',
+          ]));
     });
 
     test('message logging - calls toString', () {
