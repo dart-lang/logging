@@ -191,7 +191,7 @@ void main() {
     test('custom zone', () {
       var root = Logger.root;
 
-      var recordingZone;
+      Zone recordingZone;
       var records = new List<LogRecord>();
       root.onRecord.listen(records.add);
 
@@ -304,9 +304,10 @@ void main() {
 
     test('add/remove handlers - no hierarchy', () {
       int calls = 0;
-      var handler = (_) {
+      void handler(_) {
         calls++;
-      };
+      }
+
       final sub = c.onRecord.listen(handler);
       root.info("foo");
       root.info("foo");
@@ -319,9 +320,10 @@ void main() {
     test('add/remove handlers - with hierarchy', () {
       hierarchicalLoggingEnabled = true;
       int calls = 0;
-      var handler = (_) {
+      void handler(_) {
         calls++;
-      };
+      }
+
       c.onRecord.listen(handler);
       root.info("foo");
       root.info("foo");
@@ -612,12 +614,7 @@ void main() {
     });
 
     test('provided trace is used if given', () {
-      var trace;
-      try {
-        throw 'trace';
-      } catch (e, t) {
-        trace = t;
-      }
+      var trace = StackTrace.current;
       var records = new List<LogRecord>();
       recordStackTraceAtLevel = Level.WARNING;
       root.onRecord.listen(records.add);
