@@ -1,5 +1,5 @@
 language: dart
-sudo: false
+
 dart:
   - dev
   - stable
@@ -8,8 +8,6 @@ dart_task:
   - test: --platform vm
   - test: --platform firefox
   - test: --platform chrome
-  - test: --platform dartium
-    install_dartium: true
   - dartanalyzer
 
 matrix:
