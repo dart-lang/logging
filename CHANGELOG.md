@@ -1,3 +1,7 @@
+## 0.11.3+2
+
+* Set max SDK version to `<3.0.0`, and adjust other dependencies.
+
 ## 0.11.3+1
 
 * Fixed several documentation comments.
