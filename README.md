@@ -1,33 +1,31 @@
 ## Initializing
 
-By default, the logging package does not do anything useful with the
-log messages. You must configure the logging level and add a handler
-for the log messages.
+By default, the logging package does not do anything useful with the log
+messages. You must configure the logging level and add a handler for the log
+messages.
 
-Here is a simple logging configuration that logs all messages
-via `print`.
+Here is a simple logging configuration that logs all messages via `print`.
 
 ```dart
 Logger.root.level = Level.ALL;
-Logger.root.onRecord.listen((LogRecord rec) {
-  print('${rec.level.name}: ${rec.time}: ${rec.message}');
+Logger.root.onRecord.listen((record) {
+  print('${record.level.name}: ${record.time}: ${record.message}');
 });
 ```
 
-First, set the root [Level]. All messages at or above the level are
-sent to the [onRecord] stream.
+First, set the root `Level`. All messages at or above the level are sent to the
+`onRecord` stream.
 
-Then, listen on the [onRecord] stream for [LogRecord] events. The
-[LogRecord] class has various properties for the message, error,
-logger name, and more.
+Then, listen on the `onRecord` stream for `LogRecord` events. The `LogRecord`
+class has various properties for the message, error, logger name, and more.
 
 ## Logging messages
 
-Create a [Logger] with a unique name to easily identify the source
-of the log messages.
+Create a `Logger` with a unique name to easily identify the source of the log
+messages.
 
 ```dart
-final Logger log = new Logger('MyClassName');
+final log = Logger('MyClassName');
 ```
 
 Here is an example of logging a debug message and an error:
@@ -39,11 +37,11 @@ var future = doSomethingAsync().then((result) {
 }).catchError((e, stackTrace) => log.severe('Oh noes!', e, stackTrace));
 ```
 
-When logging more complex messages, you can pass a closure instead
-that will be evaluated only if the message is actually logged:
+When logging more complex messages, you can pass a closure instead that will be
+evaluated only if the message is actually logged:
 
 ```dart
 log.fine(() => [1, 2, 3, 4, 5].map((e) => e * 4).join("-"));
 ```
 
-See the [Logger] class for the different logging methods.
+See the `Logger` class for the different logging methods.
