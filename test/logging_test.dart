@@ -30,7 +30,7 @@ void main() {
   });
 
   test('default levels are in order', () {
-    final levels = Level.LEVELS;
+    final levels = Level.levels;
 
     for (int i = 0; i < levels.length; i++) {
       for (int j = i + 1; j < levels.length; j++) {
@@ -41,19 +41,19 @@ void main() {
 
   test('levels are comparable', () {
     final unsorted = [
-      Level.INFO,
-      Level.CONFIG,
-      Level.FINE,
-      Level.SHOUT,
-      Level.OFF,
-      Level.FINER,
-      Level.ALL,
-      Level.WARNING,
-      Level.FINEST,
-      Level.SEVERE,
+      Level.info,
+      Level.config,
+      Level.fine,
+      Level.shout,
+      Level.off,
+      Level.finer,
+      Level.all,
+      Level.warning,
+      Level.finest,
+      Level.severe,
     ];
 
-    final sorted = Level.LEVELS;
+    final sorted = Level.levels;
 
     expect(unsorted, isNot(orderedEquals(sorted)));
 
@@ -63,10 +63,10 @@ void main() {
 
   test('levels are hashable', () {
     var map = new Map<Level, String>();
-    map[Level.INFO] = 'info';
-    map[Level.SHOUT] = 'shout';
-    expect(map[Level.INFO], same('info'));
-    expect(map[Level.SHOUT], same('shout'));
+    map[Level.info] = 'info';
+    map[Level.shout] = 'shout';
+    expect(map[Level.info], same('info'));
+    expect(map[Level.shout], same('shout'));
   });
 
   test('logger name cannot start with a "." ', () {
@@ -124,7 +124,7 @@ void main() {
   });
 
   test('stackTrace gets throw to LogRecord', () {
-    Logger.root.level = Level.INFO;
+    Logger.root.level = Level.info;
 
     var records = new List<LogRecord>();
 
@@ -133,11 +133,11 @@ void main() {
     try {
       throw new UnsupportedError('test exception');
     } catch (error, stack) {
-      Logger.root.log(Level.SEVERE, 'severe', error, stack);
+      Logger.root.log(Level.severe, 'severe', error, stack);
       Logger.root.warning('warning', error, stack);
     }
 
-    Logger.root.log(Level.SHOUT, 'shout');
+    Logger.root.log(Level.shout, 'shout');
 
     sub.cancel();
 
@@ -199,7 +199,7 @@ void main() {
         recordingZone = Zone.current;
       });
 
-      runZoned(() => root.log(Level.INFO, 'hello', null, null, recordingZone));
+      runZoned(() => root.log(Level.info, 'hello', null, null, recordingZone));
 
       expect(records, hasLength(1));
       expect(records.first.zone, equals(recordingZone));
@@ -238,7 +238,7 @@ void main() {
 
     setUp(() {
       hierarchicalLoggingEnabled = true;
-      root.level = Level.INFO;
+      root.level = Level.info;
       a.level = null;
       b.level = null;
       c.level = null;
@@ -251,55 +251,55 @@ void main() {
       d.clearListeners();
       e.clearListeners();
       hierarchicalLoggingEnabled = false;
-      root.level = Level.INFO;
+      root.level = Level.info;
     });
 
     test('cannot set level if hierarchy is disabled', () {
       expect(() {
-        a.level = Level.FINE;
+        a.level = Level.fine;
       }, throwsUnsupportedError);
     });
 
     test('loggers effective level - no hierarchy', () {
-      expect(root.level, equals(Level.INFO));
-      expect(a.level, equals(Level.INFO));
-      expect(b.level, equals(Level.INFO));
+      expect(root.level, equals(Level.info));
+      expect(a.level, equals(Level.info));
+      expect(b.level, equals(Level.info));
 
-      root.level = Level.SHOUT;
+      root.level = Level.shout;
 
-      expect(root.level, equals(Level.SHOUT));
-      expect(a.level, equals(Level.SHOUT));
-      expect(b.level, equals(Level.SHOUT));
+      expect(root.level, equals(Level.shout));
+      expect(a.level, equals(Level.shout));
+      expect(b.level, equals(Level.shout));
     });
 
     test('loggers effective level - with hierarchy', () {
       hierarchicalLoggingEnabled = true;
-      expect(root.level, equals(Level.INFO));
-      expect(a.level, equals(Level.INFO));
-      expect(b.level, equals(Level.INFO));
-      expect(c.level, equals(Level.INFO));
+      expect(root.level, equals(Level.info));
+      expect(a.level, equals(Level.info));
+      expect(b.level, equals(Level.info));
+      expect(c.level, equals(Level.info));
 
-      root.level = Level.SHOUT;
-      b.level = Level.FINE;
+      root.level = Level.shout;
+      b.level = Level.fine;
 
-      expect(root.level, equals(Level.SHOUT));
-      expect(a.level, equals(Level.SHOUT));
-      expect(b.level, equals(Level.FINE));
-      expect(c.level, equals(Level.FINE));
+      expect(root.level, equals(Level.shout));
+      expect(a.level, equals(Level.shout));
+      expect(b.level, equals(Level.fine));
+      expect(c.level, equals(Level.fine));
     });
 
     test('isLoggable is appropriate', () {
       hierarchicalLoggingEnabled = true;
-      root.level = Level.SEVERE;
-      c.level = Level.ALL;
+      root.level = Level.severe;
+      c.level = Level.all;
       e.level = Level.OFF;
 
-      expect(root.isLoggable(Level.SHOUT), isTrue);
-      expect(root.isLoggable(Level.SEVERE), isTrue);
-      expect(root.isLoggable(Level.WARNING), isFalse);
-      expect(c.isLoggable(Level.FINEST), isTrue);
-      expect(c.isLoggable(Level.FINE), isTrue);
-      expect(e.isLoggable(Level.SHOUT), isFalse);
+      expect(root.isLoggable(Level.shout), isTrue);
+      expect(root.isLoggable(Level.severe), isTrue);
+      expect(root.isLoggable(Level.warning), isFalse);
+      expect(c.isLoggable(Level.finest), isTrue);
+      expect(c.isLoggable(Level.fine), isTrue);
+      expect(e.isLoggable(Level.shout), isFalse);
     });
 
     test('add/remove handlers - no hierarchy', () {
@@ -331,7 +331,7 @@ void main() {
     });
 
     test('logging methods store appropriate level', () {
-      root.level = Level.ALL;
+      root.level = Level.all;
       var rootMessages = [];
       root.onRecord.listen((record) {
         rootMessages.add('${record.level}: ${record.message}');
@@ -361,7 +361,7 @@ void main() {
     });
 
     test('logging methods store exception', () {
-      root.level = Level.ALL;
+      root.level = Level.all;
       var rootMessages = [];
       root.onRecord.listen((r) {
         rootMessages.add('${r.level}: ${r.message} ${r.error}');
@@ -407,7 +407,7 @@ void main() {
     });
 
     test('message logging - no hierarchy', () {
-      root.level = Level.WARNING;
+      root.level = Level.warning;
       var rootMessages = [];
       var aMessages = [];
       var cMessages = [];
@@ -457,7 +457,7 @@ void main() {
     test('message logging - with hierarchy', () {
       hierarchicalLoggingEnabled = true;
 
-      b.level = Level.WARNING;
+      b.level = Level.warning;
 
       var rootMessages = [];
       var aMessages = [];
@@ -524,7 +524,7 @@ void main() {
     });
 
     test('message logging - lazy functions', () {
-      root.level = Level.INFO;
+      root.level = Level.info;
       var messages = [];
       root.onRecord.listen((record) {
         messages.add('${record.level}: ${record.message}');
@@ -546,7 +546,7 @@ void main() {
     });
 
     test('message logging - calls toString', () {
-      root.level = Level.INFO;
+      root.level = Level.info;
       var messages = [];
       var objects = [];
       var object = new Object();
@@ -602,7 +602,7 @@ void main() {
 
     test('trace recorded only on requested levels', () {
       var records = new List<LogRecord>();
-      recordStackTraceAtLevel = Level.WARNING;
+      recordStackTraceAtLevel = Level.warning;
       root.onRecord.listen(records.add);
       root.severe('hello');
       root.warning('hello');
@@ -616,7 +616,7 @@ void main() {
     test('provided trace is used if given', () {
       var trace = StackTrace.current;
       var records = new List<LogRecord>();
-      recordStackTraceAtLevel = Level.WARNING;
+      recordStackTraceAtLevel = Level.warning;
       root.onRecord.listen(records.add);
       root.severe('hello');
       root.warning('hello', 'a', trace);
@@ -627,7 +627,7 @@ void main() {
 
     test('error also generated when generating a trace', () {
       var records = new List<LogRecord>();
-      recordStackTraceAtLevel = Level.WARNING;
+      recordStackTraceAtLevel = Level.warning;
       root.onRecord.listen(records.add);
       root.severe('hello');
       root.warning('hello');

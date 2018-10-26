@@ -271,47 +271,60 @@ class Level implements Comparable<Level> {
   const Level(this.name, this.value);
 
   /// Special key to turn on logging for all levels ([value] = 0).
-  static const Level ALL = const Level('ALL', 0);
+  static const Level all = const Level('ALL', 0);
+  static const Level ALL = all;
 
   /// Special key to turn off all logging ([value] = 2000).
-  static const Level OFF = const Level('OFF', 2000);
+  static const Level off = const Level('OFF', 2000);
+  static const Level OFF = off;
 
   /// Key for highly detailed tracing ([value] = 300).
-  static const Level FINEST = const Level('FINEST', 300);
+  static const Level finest = const Level('FINEST', 300);
+  static const Level FINEST = finest;
 
   /// Key for fairly detailed tracing ([value] = 400).
-  static const Level FINER = const Level('FINER', 400);
+  static const Level finer = const Level('FINER', 400);
+  static const Level FINER = finer;
 
   /// Key for tracing information ([value] = 500).
-  static const Level FINE = const Level('FINE', 500);
+  static const Level fine = const Level('FINE', 500);
+  static const Level FINE = fine;
 
   /// Key for static configuration messages ([value] = 700).
-  static const Level CONFIG = const Level('CONFIG', 700);
+  static const Level config = const Level('CONFIG', 700);
+  static const Level CONFIG = config;
 
   /// Key for informational messages ([value] = 800).
-  static const Level INFO = const Level('INFO', 800);
+  static const Level info = const Level('INFO', 800);
+  static const Level INFO = info;
 
   /// Key for potential problems ([value] = 900).
-  static const Level WARNING = const Level('WARNING', 900);
+  static const Level warning = const Level('WARNING', 900);
+  static const Level WARNING = warning;
 
   /// Key for serious failures ([value] = 1000).
-  static const Level SEVERE = const Level('SEVERE', 1000);
+  static const Level severe = const Level('SEVERE', 1000);
+  static const Level SEVERE = severe;
 
   /// Key for extra debugging loudness ([value] = 1200).
-  static const Level SHOUT = const Level('SHOUT', 1200);
+  static const Level shout = const Level('SHOUT', 1200);
+  static const Level SHOUT = shout;
 
-  static const List<Level> LEVELS = const [
-    ALL,
-    FINEST,
-    FINER,
-    FINE,
-    CONFIG,
-    INFO,
-    WARNING,
-    SEVERE,
-    SHOUT,
-    OFF
+  /// The list of all the predefined logging levels.
+  static const List<Level> levels = const [
+    all,
+    finest,
+    finer,
+    fine,
+    config,
+    info,
+    warning,
+    severe,
+    shout,
+    off,
   ];
+
+  static const List<Level> LEVELS = levels;
 
   @override
   bool operator ==(Object other) => other is Level && value == other.value;
