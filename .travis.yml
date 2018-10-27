@@ -6,18 +6,13 @@ dart:
 
 dart_task:
   - test: --platform vm
-  - test: --platform firefox
   - test: --platform chrome
-  - dartanalyzer
+  - dartanalyzer: --fatal-infos --fatal-warnings .
 
 matrix:
   include:
     - dart: dev
       dart_task: dartfmt
-  # TODO(travis-ci/travis-ci#8836): Remove once the travis issue is resolved.
-  allow_failures:
-    - dart_task:
-        test: --platform chrome
 
 # Only building master means that we don't run two builds for each pull request.
 branches:
