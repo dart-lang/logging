@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/dart-lang/logging.svg?branch=master)](https://travis-ci.org/dart-lang/logging)
+[![Pub](https://img.shields.io/pub/v/logging.svg)](https://pub.dartlang.org/packages/logging)
 
 ## Initializing
 
