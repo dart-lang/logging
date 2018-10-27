@@ -1,3 +1,7 @@
+## 0.11.4
+
+* Require Dart `>=2.0.0`.
+
 ## 0.11.3+2
 
 * Set max SDK version to `<3.0.0`, and adjust other dependencies.
