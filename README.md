@@ -1,5 +1,3 @@
-# Logging for Dart
-
 [![Build Status](https://travis-ci.org/dart-lang/logging.svg?branch=master)](https://travis-ci.org/dart-lang/logging)
 
 ## Initializing
