@@ -52,7 +52,7 @@ class Logger {
   /// Singleton constructor. Calling `new Logger(name)` will return the same
   /// actual instance whenever it is called with the same string name.
   factory Logger(String name) {
-    return _loggers.putIfAbsent(name, () => new Logger._named(name));
+    return _loggers.putIfAbsent(name, () => Logger._named(name));
   }
 
   /// Creates a new detached [Logger].
@@ -64,30 +64,30 @@ class Logger {
   /// It can be useful when you just need a local short-living logger,
   /// which you'd like to be garbage-collected later.
   factory Logger.detached(String name) {
-    return new Logger._internal(name, null, new Map<String, Logger>());
+    return Logger._internal(name, null, Map<String, Logger>());
   }
 
   factory Logger._named(String name) {
     if (name.startsWith('.')) {
-      throw new ArgumentError("name shouldn't start with a '.'");
+      throw ArgumentError("name shouldn't start with a '.'");
     }
     // Split hierarchical names (separated with '.').
     int dot = name.lastIndexOf('.');
     Logger parent;
     String thisName;
     if (dot == -1) {
-      if (name != '') parent = new Logger('');
+      if (name != '') parent = Logger('');
       thisName = name;
     } else {
-      parent = new Logger(name.substring(0, dot));
+      parent = Logger(name.substring(0, dot));
       thisName = name.substring(dot + 1);
     }
-    return new Logger._internal(thisName, parent, new Map<String, Logger>());
+    return Logger._internal(thisName, parent, Map<String, Logger>());
   }
 
   Logger._internal(this.name, this.parent, Map<String, Logger> children)
       : this._children = children,
-        this.children = new UnmodifiableMapView(children) {
+        this.children = UnmodifiableMapView(children) {
     if (parent != null) parent._children[name] = this;
   }
 
@@ -107,7 +107,7 @@ class Logger {
       _level = value;
     } else {
       if (parent != null) {
-        throw new UnsupportedError(
+        throw UnsupportedError(
             'Please set "hierarchicalLoggingEnabled" to true if you want to '
             'change the level on a non-root logger.');
       }
@@ -177,8 +177,8 @@ class Logger {
       }
       if (zone == null) zone = Zone.current;
 
-      var record = new LogRecord(
-          logLevel, msg, fullName, error, stackTrace, zone, object);
+      var record =
+          LogRecord(logLevel, msg, fullName, error, stackTrace, zone, object);
 
       if (hierarchicalLoggingEnabled) {
         var target = this;
@@ -227,7 +227,7 @@ class Logger {
   Stream<LogRecord> _getStream() {
     if (hierarchicalLoggingEnabled || parent == null) {
       if (_controller == null) {
-        _controller = new StreamController<LogRecord>.broadcast(sync: true);
+        _controller = StreamController<LogRecord>.broadcast(sync: true);
       }
       return _controller.stream;
     } else {
@@ -242,7 +242,7 @@ class Logger {
   }
 
   /// Top-level root [Logger].
-  static final Logger root = new Logger('');
+  static final Logger root = Logger('');
 
   /// All [Logger]s in the system.
   static final Map<String, Logger> _loggers = <String, Logger>{};
@@ -271,36 +271,36 @@ class Level implements Comparable<Level> {
   const Level(this.name, this.value);
 
   /// Special key to turn on logging for all levels ([value] = 0).
-  static const Level ALL = const Level('ALL', 0);
+  static const Level ALL = Level('ALL', 0);
 
   /// Special key to turn off all logging ([value] = 2000).
-  static const Level OFF = const Level('OFF', 2000);
+  static const Level OFF = Level('OFF', 2000);
 
   /// Key for highly detailed tracing ([value] = 300).
-  static const Level FINEST = const Level('FINEST', 300);
+  static const Level FINEST = Level('FINEST', 300);
 
   /// Key for fairly detailed tracing ([value] = 400).
-  static const Level FINER = const Level('FINER', 400);
+  static const Level FINER = Level('FINER', 400);
 
   /// Key for tracing information ([value] = 500).
-  static const Level FINE = const Level('FINE', 500);
+  static const Level FINE = Level('FINE', 500);
 
   /// Key for static configuration messages ([value] = 700).
-  static const Level CONFIG = const Level('CONFIG', 700);
+  static const Level CONFIG = Level('CONFIG', 700);
 
   /// Key for informational messages ([value] = 800).
-  static const Level INFO = const Level('INFO', 800);
+  static const Level INFO = Level('INFO', 800);
 
   /// Key for potential problems ([value] = 900).
-  static const Level WARNING = const Level('WARNING', 900);
+  static const Level WARNING = Level('WARNING', 900);
 
   /// Key for serious failures ([value] = 1000).
-  static const Level SEVERE = const Level('SEVERE', 1000);
+  static const Level SEVERE = Level('SEVERE', 1000);
 
   /// Key for extra debugging loudness ([value] = 1200).
-  static const Level SHOUT = const Level('SHOUT', 1200);
+  static const Level SHOUT = Level('SHOUT', 1200);
 
-  static const List<Level> LEVELS = const [
+  static const List<Level> LEVELS = [
     ALL,
     FINEST,
     FINER,
@@ -361,7 +361,7 @@ class LogRecord {
 
   LogRecord(this.level, this.message, this.loggerName,
       [this.error, this.stackTrace, this.zone, this.object])
-      : time = new DateTime.now(),
+      : time = DateTime.now(),
         sequenceNumber = LogRecord._nextNumber++;
 
   @override

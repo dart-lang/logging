@@ -62,7 +62,7 @@ void main() {
   });
 
   test('levels are hashable', () {
-    var map = new Map<Level, String>();
+    var map = Map<Level, String>();
     map[Level.INFO] = 'info';
     map[Level.SHOUT] = 'shout';
     expect(map[Level.INFO], same('info'));
@@ -70,11 +70,11 @@ void main() {
   });
 
   test('logger name cannot start with a "." ', () {
-    expect(() => new Logger('.c'), throwsArgumentError);
+    expect(() => Logger('.c'), throwsArgumentError);
   });
 
   test('logger naming is hierarchical', () {
-    Logger c = new Logger('a.b.c');
+    Logger c = Logger('a.b.c');
     expect(c.name, equals('c'));
     expect(c.parent.name, equals('b'));
     expect(c.parent.parent.name, equals('a'));
@@ -83,7 +83,7 @@ void main() {
   });
 
   test('logger full name', () {
-    Logger c = new Logger('a.b.c');
+    Logger c = Logger('a.b.c');
     expect(c.fullName, equals('a.b.c'));
     expect(c.parent.fullName, equals('a.b'));
     expect(c.parent.parent.fullName, equals('a'));
@@ -92,9 +92,9 @@ void main() {
   });
 
   test('logger parent-child links are correct', () {
-    Logger a = new Logger('a');
-    Logger b = new Logger('a.b');
-    Logger c = new Logger('a.c');
+    Logger a = Logger('a');
+    Logger b = Logger('a.b');
+    Logger c = Logger('a.c');
     expect(a, same(b.parent));
     expect(a, same(c.parent));
     expect(a.children['b'], same(b));
@@ -102,18 +102,18 @@ void main() {
   });
 
   test('loggers are singletons', () {
-    Logger a1 = new Logger('a');
-    Logger a2 = new Logger('a');
-    Logger b = new Logger('a.b');
+    Logger a1 = Logger('a');
+    Logger a2 = Logger('a');
+    Logger b = Logger('a.b');
     Logger root = Logger.root;
     expect(a1, same(a2));
     expect(a1, same(b.parent));
     expect(root, same(a1.parent));
-    expect(root, same(new Logger('')));
+    expect(root, same(Logger('')));
   });
 
   test('cannot directly manipulate Logger.children', () {
-    var loggerAB = new Logger('a.b');
+    var loggerAB = Logger('a.b');
     var loggerA = loggerAB.parent;
 
     expect(loggerA.children['b'], same(loggerAB), reason: 'can read Children');
@@ -126,12 +126,12 @@ void main() {
   test('stackTrace gets throw to LogRecord', () {
     Logger.root.level = Level.INFO;
 
-    var records = new List<LogRecord>();
+    var records = List<LogRecord>();
 
     var sub = Logger.root.onRecord.listen(records.add);
 
     try {
-      throw new UnsupportedError('test exception');
+      throw UnsupportedError('test exception');
     } catch (error, stack) {
       Logger.root.log(Level.SEVERE, 'severe', error, stack);
       Logger.root.warning('warning', error, stack);
@@ -164,7 +164,7 @@ void main() {
       var root = Logger.root;
 
       var recordingZone = Zone.current;
-      var records = new List<LogRecord>();
+      var records = List<LogRecord>();
       root.onRecord.listen(records.add);
       root.info('hello');
 
@@ -176,7 +176,7 @@ void main() {
       var root = Logger.root;
 
       var recordingZone;
-      var records = new List<LogRecord>();
+      var records = List<LogRecord>();
       root.onRecord.listen(records.add);
 
       runZoned(() {
@@ -192,7 +192,7 @@ void main() {
       var root = Logger.root;
 
       Zone recordingZone;
-      var records = new List<LogRecord>();
+      var records = List<LogRecord>();
       root.onRecord.listen(records.add);
 
       runZoned(() {
@@ -208,9 +208,9 @@ void main() {
 
   group('detached loggers', () {
     test('create new instances of Logger', () {
-      Logger a1 = new Logger.detached('a');
-      Logger a2 = new Logger.detached('a');
-      Logger a = new Logger('a');
+      Logger a1 = Logger.detached('a');
+      Logger a2 = Logger.detached('a');
+      Logger a = Logger('a');
 
       expect(a1, isNot(a2));
       expect(a1, isNot(a));
@@ -218,23 +218,23 @@ void main() {
     });
 
     test('parent is null', () {
-      Logger a = new Logger.detached('a');
+      Logger a = Logger.detached('a');
       expect(a.parent, null);
     });
 
     test('children is empty', () {
-      Logger a = new Logger.detached('a');
+      Logger a = Logger.detached('a');
       expect(a.children, {});
     });
   });
 
   group('mutating levels', () {
     Logger root = Logger.root;
-    Logger a = new Logger('a');
-    Logger b = new Logger('a.b');
-    Logger c = new Logger('a.b.c');
-    Logger d = new Logger('a.b.c.d');
-    Logger e = new Logger('a.b.c.d.e');
+    Logger a = Logger('a');
+    Logger b = Logger('a.b');
+    Logger c = Logger('a.b.c');
+    Logger d = Logger('a.b.c.d');
+    Logger e = Logger('a.b.c.d.e');
 
     setUp(() {
       hierarchicalLoggingEnabled = true;
@@ -549,7 +549,7 @@ void main() {
       root.level = Level.INFO;
       var messages = [];
       var objects = [];
-      var object = new Object();
+      var object = Object();
       root.onRecord.listen((record) {
         messages.add('${record.level}: ${record.message}');
         objects.add(record.object);
@@ -589,7 +589,7 @@ void main() {
     });
 
     test('no stack trace by default', () {
-      var records = new List<LogRecord>();
+      var records = List<LogRecord>();
       root.onRecord.listen(records.add);
       root.severe('hello');
       root.warning('hello');
@@ -601,7 +601,7 @@ void main() {
     });
 
     test('trace recorded only on requested levels', () {
-      var records = new List<LogRecord>();
+      var records = List<LogRecord>();
       recordStackTraceAtLevel = Level.WARNING;
       root.onRecord.listen(records.add);
       root.severe('hello');
@@ -615,7 +615,7 @@ void main() {
 
     test('provided trace is used if given', () {
       var trace = StackTrace.current;
-      var records = new List<LogRecord>();
+      var records = List<LogRecord>();
       recordStackTraceAtLevel = Level.WARNING;
       root.onRecord.listen(records.add);
       root.severe('hello');
@@ -626,7 +626,7 @@ void main() {
     });
 
     test('error also generated when generating a trace', () {
-      var records = new List<LogRecord>();
+      var records = List<LogRecord>();
       recordStackTraceAtLevel = Level.WARNING;
       root.onRecord.listen(records.add);
       root.severe('hello');
