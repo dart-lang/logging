@@ -245,6 +245,7 @@ class Logger {
 }
 
 /// Handler callback to process log entries as they are added to a [Logger].
+@deprecated
 typedef LoggerHandler = void Function(LogRecord record);
 
 /// [Level]s to control logging output. Logging can be enabled to include all
