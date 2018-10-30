@@ -2,3 +2,4 @@
 .pub
 packages
 pubspec.lock
+.idea
