@@ -51,9 +51,8 @@ class Logger {
 
   /// Singleton constructor. Calling `new Logger(name)` will return the same
   /// actual instance whenever it is called with the same string name.
-  factory Logger(String name) {
-    return _loggers.putIfAbsent(name, () => Logger._named(name));
-  }
+  factory Logger(String name) =>
+      _loggers.putIfAbsent(name, () => Logger._named(name));
 
   /// Creates a new detached [Logger].
   ///
@@ -63,9 +62,8 @@ class Logger {
   ///
   /// It can be useful when you just need a local short-living logger,
   /// which you'd like to be garbage-collected later.
-  factory Logger.detached(String name) {
-    return Logger._internal(name, null, <String, Logger>{});
-  }
+  factory Logger.detached(String name) =>
+      Logger._internal(name, null, <String, Logger>{});
 
   factory Logger._named(String name) {
     if (name.startsWith('.')) {
@@ -247,7 +245,8 @@ class Logger {
 }
 
 /// Handler callback to process log entries as they are added to a [Logger].
-typedef void LoggerHandler(LogRecord record);
+@deprecated
+typedef LoggerHandler = void Function(LogRecord record);
 
 /// [Level]s to control logging output. Logging can be enabled to include all
 /// levels above certain [Level]. [Level]s are ordered using an integer
