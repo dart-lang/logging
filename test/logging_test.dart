@@ -639,7 +639,6 @@ void main() {
     });
   });
 
-
   group('manager tests', () {
     LogManager manager;
     LogRecord logRecord;

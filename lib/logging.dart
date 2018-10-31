@@ -372,16 +372,17 @@ typedef _ServiceExtensionCallback = Future<Map<String, dynamic>> Function(
 
 /// A shared manager instance whose recorded messages are logged to the
 /// developer console.
-final LogManager logManager = LogManager()..onRecord.listen((record) {
-  developer.log(
-    record.message,
-    name: record.loggerName,
-    time: record.time,
-    error: record.error,
-    level: record.level.value,
-    stackTrace: record.stackTrace,
-  );
-});
+final LogManager logManager = LogManager()
+  ..onRecord.listen((record) {
+    developer.log(
+      record.message,
+      name: record.loggerName,
+      time: record.time,
+      error: record.error,
+      level: record.level.value,
+      stackTrace: record.stackTrace,
+    );
+  });
 
 /// Log Managers record messages only written to loggers explicitly enabled by
 /// name.
