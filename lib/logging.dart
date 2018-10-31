@@ -422,9 +422,12 @@ final LogManager logManager = LogManager()..onRecord.listen((record) {
 /// }
 /// ```
 ///
-/// * To create loggers, see [Logger].
-/// * To enable or disable a logger, use [enableLogging].
-/// * To query channel enablement, use [shouldLog].
+///
+/// See also:
+///
+/// * [Logger], to create a logger.
+/// * [enableLogging], to enable or disable a logger.
+/// * [shouldLog], to query logger enablement.
 class LogManager {
   static bool _initialized;
 
