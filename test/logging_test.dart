@@ -638,4 +638,48 @@ void main() {
       expect(records[2].error, isNull);
     });
   });
+
+
+  group('manager tests', () {
+    LogManager manager;
+    LogRecord logRecord;
+
+    setUp(() {
+      manager = LogManager()
+        ..onRecord.listen((record) {
+          logRecord = record;
+        });
+    });
+
+    tearDown(() {
+      logRecord = null;
+    });
+
+    test('enable', () {
+      var testLogger = Logger('test.logger');
+      expect(manager.shouldLog('test.logger'), isFalse);
+      testLogger.info('ignored...');
+      expect(logRecord, isNull);
+      manager.enableLogging('test.logger');
+      expect(manager.shouldLog('test.logger'), isTrue);
+      testLogger.info('logged from test logger');
+      expect(logRecord.message, 'logged from test logger');
+    });
+
+    test('enable (unregistered)', () {
+      expect(manager.shouldLog('foo'), isFalse);
+      manager.enableLogging('foo');
+      Logger('foo');
+      expect(manager.shouldLog('foo'), isTrue);
+    });
+
+    test('disable', () {
+      Logger('foo');
+      expect(manager.shouldLog('foo'), isFalse);
+      manager.enableLogging('foo');
+      expect(manager.shouldLog('foo'), isTrue);
+      manager.enableLogging('foo', enable: false);
+      expect(manager.shouldLog('foo'), isFalse);
+    });
+  });
 }

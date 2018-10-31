@@ -6,6 +6,8 @@ library logging;
 
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
+import 'dart:developer' as developer;
 
 /// Whether to allow fine-grain logging and configuration of loggers in a
 /// hierarchy.
@@ -363,4 +365,188 @@ class LogRecord {
 
   @override
   String toString() => '[${level.name}] $loggerName: $message';
+}
+
+typedef _ServiceExtensionCallback = Future<Map<String, dynamic>> Function(
+    Map<String, String> parameters);
+
+/// A shared manager instance whose recorded messages are logged to the
+/// developer console.
+final LogManager logManager = LogManager()..onRecord.listen((record) {
+  developer.log(
+    record.message,
+    name: record.loggerName,
+    time: record.time,
+    error: record.error,
+    level: record.level.value,
+    stackTrace: record.stackTrace,
+  );
+});
+
+/// Log Managers record messages only written to loggers explicitly enabled by
+/// name.
+///
+/// For example, in the given source, only messages to `loggerA` will be sent to
+/// the `onRecord` stream.
+///
+/// ```
+/// var loggerA = Logger('loggerA');
+/// var loggerA = Logger('loggerB');
+///
+/// var manager = LogManager()..enableLogging('loggerA');
+///
+/// loggerA.info('hello from logger A'); // recorded
+/// loggerB.info('here goes nothing');   // ignored
+/// ```
+///
+/// Log managers can be created but the provided [logManager] should suffice
+/// for most purposes.  The shared manager redirects recorded messages to the
+/// developer log.
+///
+/// **Important note:** managed loggers respect logger `root` level configuration.
+/// For example, in the following, `logger` only reports `severe` messages
+/// as expected.
+///
+/// ```
+/// Logger.root.level = Level.SEVERE;
+///
+/// ...
+///
+/// var logger = Logger('my.logger');
+/// logManager.enable('my.logger');
+/// try {
+///   logger.info('doing something'); // ignored
+///   ...
+/// } catch(e, stackTrace) {
+///   logger.severe('uh-oh!, e, stackTrace); // recorded
+/// }
+/// ```
+///
+/// * To create loggers, see [Logger].
+/// * To enable or disable a logger, use [enableLogging].
+/// * To query channel enablement, use [shouldLog].
+class LogManager {
+  static bool _initialized;
+
+  final Set<String> _enabledLoggers = Set<String>();
+
+  final StreamController<LogRecord> _logController =
+      StreamController.broadcast(sync: true);
+  final StreamController<String> _loggerAddedBroadcaster =
+      StreamController.broadcast();
+  final StreamController<String> _loggerEnabledBroadcaster =
+      StreamController.broadcast();
+
+  LogManager() {
+    Logger.root.onRecord.listen((record) {
+      if (shouldLog(record.loggerName)) {
+        _logController.add(record);
+      }
+    });
+  }
+
+  /// Returns a stream of messages added to loggers enabled by this manager.
+  Stream<LogRecord> get onRecord => _logController.stream;
+
+  /// Enable (or disable) logging of messages sent to the given [logger].
+  void enableLogging(String logger, {bool enable = true}) {
+    enable ? _enabledLoggers.add(logger) : _enabledLoggers.remove(logger);
+    _loggerEnabledBroadcaster.add(logger);
+  }
+
+  /// Whether messages to the given [logger] should be logged by this manager.
+  /// @see [enableLogging]
+  bool shouldLog(String logger) => _enabledLoggers.contains(logger);
+
+  /// Called to register service extensions.
+  void initServiceExtensions() {
+    // Avoid double initialization.
+    if (_initialized == true) {
+      return;
+    }
+
+    // Fire events for new loggers.
+    _loggerAddedBroadcaster.stream.listen((String name) {
+      developer.postEvent('logging.logger.added', <String, dynamic>{
+        'logger': name,
+      });
+    });
+
+    // Fire events for logger enablement changes.
+    _loggerEnabledBroadcaster.stream.listen((String name) {
+      developer.postEvent('logging.logger.enabled', <String, dynamic>{
+        'logger': name,
+        'enabled': shouldLog(name),
+      });
+    });
+
+    // Service for enabling loggers.
+    _registerServiceExtension(
+      name: 'enable',
+      callback: (Map<String, Object> parameters) async {
+        final String logger = parameters['logger'];
+        if (logger != null) {
+          if (parameters.containsKey('enabled')) {
+            enableLogging(logger, enable: parameters['enabled'] == 'true');
+          }
+          return <String, dynamic>{
+            'enabled': shouldLog(logger).toString(),
+          };
+        } else {
+          return <String, dynamic>{};
+        }
+      },
+    );
+
+    // Service for querying loggers.
+    _registerServiceExtension(
+      name: 'loggers',
+      callback: (Map<String, dynamic> parameters) async => {
+            'value': Logger._loggers.keys
+                .map((logger) => MapEntry(logger, <String, String>{
+                      'enabled': shouldLog(logger).toString(),
+                    }))
+          },
+    );
+
+    _initialized = true;
+  }
+
+  /// Registers a service extension method with the given name and a callback to
+  /// be called when the extension method is called.
+  void _registerServiceExtension({
+    String name,
+    _ServiceExtensionCallback callback,
+  }) {
+    assert(name != null);
+    assert(callback != null);
+    final methodName = 'ext.dart.logging.$name';
+    developer.registerExtension(methodName,
+        (String method, Map<String, String> parameters) async {
+      assert(method == methodName);
+
+      dynamic caughtException;
+      StackTrace caughtStack;
+      Map<String, dynamic> result;
+      try {
+        result = await callback(parameters);
+      } catch (exception, stack) {
+        caughtException = exception;
+        caughtStack = stack;
+      }
+      if (caughtException == null) {
+        result['type'] = '_extensionType';
+        result['method'] = method;
+        return developer.ServiceExtensionResponse.result(json.encode(result));
+      } else {
+        return developer.ServiceExtensionResponse.error(
+            developer.ServiceExtensionResponse.extensionError,
+            json.encode(<String, String>{
+              'exception': caughtException.toString(),
+              'stack': caughtStack.toString(),
+              'method': method,
+            }));
+      }
+    });
+  }
 }
