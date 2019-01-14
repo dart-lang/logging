@@ -214,6 +214,18 @@ class Logger {
   void warning(message, [Object error, StackTrace stackTrace]) =>
       log(Level.WARNING, message, error, stackTrace);
 
+  /// Log message at level [Level.ERROR].
+  void error(message, [Object error, StackTrace stackTrace]) =>
+      log(Level.ERROR, message, error, stackTrace);
+
+  /// Log message at level [Level.DEBUG].
+  void debug(message, [Object error, StackTrace stackTrace]) =>
+      log(Level.DEBUG, message, error, stackTrace);
+
+  /// Log message at level [Level.CRITICAL].
+  void critical(message, [Object error, StackTrace stackTrace]) =>
+      log(Level.CRITICAL, message, error, stackTrace);
+
   /// Log message at level [Level.SEVERE].
   void severe(message, [Object error, StackTrace stackTrace]) =>
       log(Level.SEVERE, message, error, stackTrace);
@@ -270,6 +282,9 @@ class Level implements Comparable<Level> {
   /// Special key to turn on logging for all levels ([value] = 0).
   static const Level ALL = Level('ALL', 0);
 
+  /// key for debug messages ([value] = 10).
+  static const Level DEBUG = Level('DEBUG', 10);
+
   /// Special key to turn off all logging ([value] = 2000).
   static const Level OFF = Level('OFF', 2000);
 
@@ -291,22 +306,31 @@ class Level implements Comparable<Level> {
   /// Key for potential problems ([value] = 900).
   static const Level WARNING = Level('WARNING', 900);
 
+  /// Key for errors ([value] = 950).
+  static const Level ERROR = Level('ERROR', 950);
+
   /// Key for serious failures ([value] = 1000).
   static const Level SEVERE = Level('SEVERE', 1000);
 
   /// Key for extra debugging loudness ([value] = 1200).
   static const Level SHOUT = Level('SHOUT', 1200);
 
+  /// Key for critical messages ([value] = 1500).
+  static const Level CRITICAL = Level('CRITICAL', 1500);
+
   static const List<Level> LEVELS = [
     ALL,
+    DEBUG,
     FINEST,
     FINER,
     FINE,
     CONFIG,
     INFO,
     WARNING,
+    ERROR,
     SEVERE,
     SHOUT,
+    CRITICAL,
     OFF
   ];
 

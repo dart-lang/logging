@@ -41,6 +41,7 @@ void main() {
 
   test('levels are comparable', () {
     final unsorted = [
+      Level.DEBUG,
       Level.INFO,
       Level.CONFIG,
       Level.FINE,
@@ -49,8 +50,10 @@ void main() {
       Level.FINER,
       Level.ALL,
       Level.WARNING,
+      Level.ERROR,
       Level.FINEST,
       Level.SEVERE,
+      Level.CRITICAL,
     ];
 
     final sorted = Level.LEVELS;
@@ -375,6 +378,9 @@ void main() {
       root.warning('6');
       root.severe('7');
       root.shout('8');
+      root.critical('9');
+      root.error('10');
+      root.debug('11');
       root.finest('1', 'a');
       root.finer('2', 'b');
       root.fine('3', ['c']);
@@ -383,6 +389,9 @@ void main() {
       root.warning('6', 'f');
       root.severe('7', 'g');
       root.shout('8', 'h');
+      root.critical('9', 'c');
+      root.error('10', 'e');
+      root.debug('11', 'd');
 
       expect(
           rootMessages,
@@ -395,6 +404,9 @@ void main() {
             'WARNING: 6 null',
             'SEVERE: 7 null',
             'SHOUT: 8 null',
+            'CRITICAL: 9 null',
+            'ERROR: 10 null',
+            'DEBUG: 11 null',
             'FINEST: 1 a',
             'FINER: 2 b',
             'FINE: 3 [c]',
@@ -402,7 +414,10 @@ void main() {
             'INFO: 5 e',
             'WARNING: 6 f',
             'SEVERE: 7 g',
-            'SHOUT: 8 h'
+            'SHOUT: 8 h',
+            'CRITICAL: 9 c',
+            'ERROR: 10 e',
+            'DEBUG: 11 d'
           ]));
     });
 
