@@ -41,7 +41,6 @@ void main() {
 
   test('levels are comparable', () {
     final unsorted = [
-      Level.DEBUG,
       Level.INFO,
       Level.CONFIG,
       Level.FINE,
@@ -50,10 +49,8 @@ void main() {
       Level.FINER,
       Level.ALL,
       Level.WARNING,
-      Level.ERROR,
       Level.FINEST,
       Level.SEVERE,
-      Level.CRITICAL,
     ];
 
     final sorted = Level.LEVELS;
