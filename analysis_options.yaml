@@ -53,8 +53,6 @@ linter:
     - prefer_typing_uninitialized_variables
     - slash_for_doc_comments
     - test_types_in_equals
-    - super_goes_last
-    - test_types_in_equals
     - throw_in_finally
     - type_init_formals
     - unnecessary_brace_in_string_interps
