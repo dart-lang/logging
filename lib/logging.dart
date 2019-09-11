@@ -22,7 +22,7 @@ Level recordStackTraceAtLevel = Level.OFF;
 ///
 /// This will be the level of all loggers if [hierarchicalLoggingEnabled] is
 /// false.
-Level _rootLevel = Level.INFO;
+Level? _rootLevel = Level.INFO;
 
 /// Use a [Logger] to log debug messages.
 ///
@@ -39,15 +39,15 @@ class Logger {
   final Logger parent;
 
   /// Logging [Level] used for entries generated on this logger.
-  Level _level;
+  Level? _level;
 
   final Map<String, Logger> _children;
 
   /// Children in the hierarchy of loggers, indexed by their simple names.
-  final Map<String, Logger> children;
+  final Map<String, Logger?> children;
 
   /// Controller used to notify when log entries are added to this logger.
-  StreamController<LogRecord> _controller;
+  StreamController<LogRecord>? _controller;
 
   /// Singleton constructor. Calling `new Logger(name)` will return the same
   /// actual instance whenever it is called with the same string name.
@@ -64,7 +64,7 @@ class Logger {
   /// It can be useful when you just need a local short-living logger,
   /// which you'd like to be garbage-collected later.
   factory Logger.detached(String name) {
-    return new Logger._internal(name, null, new Map<String, Logger>());
+    return new Logger._internal(name, null!, new Map<String, Logger>());
   }
 
   factory Logger._named(String name) {
@@ -88,29 +88,29 @@ class Logger {
   Logger._internal(this.name, this.parent, Map<String, Logger> children)
       : this._children = children,
         this.children = new UnmodifiableMapView(children) {
-    if (parent != null) parent._children[name] = this;
+    /* if (parent != null) */ parent._children[name] = this;
   }
 
   /// Effective level considering the levels established in this logger's
   /// parents (when [hierarchicalLoggingEnabled] is true).
-  Level get level {
+  Level? get level {
     if (hierarchicalLoggingEnabled) {
       if (_level != null) return _level;
-      if (parent != null) return parent.level;
+      /* if (parent != null) */ return parent.level;
     }
     return _rootLevel;
   }
 
   /// Override the level for this particular [Logger] and its children.
-  set level(Level value) {
+  set level(Level? value) {
     if (hierarchicalLoggingEnabled && parent != null) {
       _level = value;
     } else {
-      if (parent != null) {
-        throw new UnsupportedError(
+      /* if (parent != null) {
+        */ throw new UnsupportedError(
             'Please set "hierarchicalLoggingEnabled" to true if you want to '
-            'change the level on a non-root logger.');
-      }
+            'change the level on a non-root logger.'); /*
+      } */
       _rootLevel = value;
     }
   }
@@ -127,7 +127,7 @@ class Logger {
   void clearListeners() {
     if (hierarchicalLoggingEnabled || parent == null) {
       if (_controller != null) {
-        _controller.close();
+        _controller!.close();
         _controller = null;
       }
     } else {
@@ -136,7 +136,7 @@ class Logger {
   }
 
   /// Whether a message for [value]'s level is loggable in this logger.
-  bool isLoggable(Level value) => (value >= level);
+  bool isLoggable(Level value) => (value >= level!);
 
   /// Adds a log record for a [message] at a particular [logLevel] if
   /// `isLoggable(logLevel)` is true.
@@ -156,14 +156,14 @@ class Logger {
   /// records of different zones differently (e.g. group log records by HTTP
   /// request if each HTTP request handler runs in it's own zone).
   void log(Level logLevel, message,
-      [Object error, StackTrace stackTrace, Zone zone]) {
-    Object object;
+      [Object? error, StackTrace? stackTrace, Zone? zone]) {
+    Object? object;
     if (isLoggable(logLevel)) {
       if (message is Function) {
         message = message();
       }
 
-      String msg;
+      String? msg;
       if (message is String) {
         msg = message;
       } else {
@@ -193,35 +193,35 @@ class Logger {
   }
 
   /// Log message at level [Level.FINEST].
-  void finest(message, [Object error, StackTrace stackTrace]) =>
+  void finest(message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.FINEST, message, error, stackTrace);
 
   /// Log message at level [Level.FINER].
-  void finer(message, [Object error, StackTrace stackTrace]) =>
+  void finer(message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.FINER, message, error, stackTrace);
 
   /// Log message at level [Level.FINE].
-  void fine(message, [Object error, StackTrace stackTrace]) =>
+  void fine(message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.FINE, message, error, stackTrace);
 
   /// Log message at level [Level.CONFIG].
-  void config(message, [Object error, StackTrace stackTrace]) =>
+  void config(message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.CONFIG, message, error, stackTrace);
 
   /// Log message at level [Level.INFO].
-  void info(message, [Object error, StackTrace stackTrace]) =>
+  void info(message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.INFO, message, error, stackTrace);
 
   /// Log message at level [Level.WARNING].
-  void warning(message, [Object error, StackTrace stackTrace]) =>
+  void warning(message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.WARNING, message, error, stackTrace);
 
   /// Log message at level [Level.SEVERE].
-  void severe(message, [Object error, StackTrace stackTrace]) =>
+  void severe(message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.SEVERE, message, error, stackTrace);
 
   /// Log message at level [Level.SHOUT].
-  void shout(message, [Object error, StackTrace stackTrace]) =>
+  void shout(message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.SHOUT, message, error, stackTrace);
 
   Stream<LogRecord> _getStream() {
@@ -229,7 +229,7 @@ class Logger {
       if (_controller == null) {
         _controller = new StreamController<LogRecord>.broadcast(sync: true);
       }
-      return _controller.stream;
+      return _controller!.stream;
     } else {
       return root._getStream();
     }
@@ -237,7 +237,7 @@ class Logger {
 
   void _publish(LogRecord record) {
     if (_controller != null) {
-      _controller.add(record);
+      _controller!.add(record);
     }
   }
 
@@ -314,7 +314,7 @@ class Level implements Comparable<Level> {
   ];
 
   @override
-  bool operator ==(Object other) => other is Level && value == other.value;
+  bool operator ==(Object? other) => other is Level && value == other!.value;
   bool operator <(Level other) => value < other.value;
   bool operator <=(Level other) => value <= other.value;
   bool operator >(Level other) => value > other.value;
@@ -334,10 +334,10 @@ class Level implements Comparable<Level> {
 /// individual handlers.
 class LogRecord {
   final Level level;
-  final String message;
+  final String? message;
 
   /// Non-string message passed to Logger.
-  final Object object;
+  final Object? object;
 
   /// Logger where this record is stored.
   final String loggerName;
@@ -351,13 +351,13 @@ class LogRecord {
   static int _nextNumber = 0;
 
   /// Associated error (if any) when recording errors messages.
-  final Object error;
+  final Object? error;
 
   /// Associated stackTrace (if any) when recording errors messages.
-  final StackTrace stackTrace;
+  final StackTrace? stackTrace;
 
   /// Zone of the calling code which resulted in this LogRecord.
-  final Zone zone;
+  final Zone? zone;
 
   LogRecord(this.level, this.message, this.loggerName,
       [this.error, this.stackTrace, this.zone, this.object])
