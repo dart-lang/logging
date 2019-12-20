@@ -73,6 +73,12 @@ void main() {
     expect(() => Logger('.c'), throwsArgumentError);
   });
 
+  test('root level has proper defaults', () {
+    expect(Logger.root, isNotNull);
+    expect(Logger.root.parent, null);
+    expect(Logger.root.level, defaultLevel);
+  });
+
   test('logger naming is hierarchical', () {
     var c = Logger('a.b.c');
     expect(c.name, equals('c'));
