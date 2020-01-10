@@ -1,5 +1,6 @@
-## 0.11.4
+## 0.11.4-dev
 
+* Add top level `defaultLevel`.
 * Require Dart `>=2.0.0`.
 
 ## 0.11.3+2
