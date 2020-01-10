@@ -7,7 +7,7 @@ import 'log_record.dart';
 /// Whether to allow fine-grain logging and configuration of loggers in a
 /// hierarchy.
 ///
-/// When false, all logging is merged in the root logger.
+/// When false, all hierarchical logging instead is merged in the root logger.
 bool hierarchicalLoggingEnabled = false;
 
 /// Automatically record stack traces for any message of this level or above.
@@ -15,11 +15,8 @@ bool hierarchicalLoggingEnabled = false;
 /// Because this is expensive, this is off by default.
 Level recordStackTraceAtLevel = Level.OFF;
 
-/// Level for the root-logger.
-///
-/// This will be the level of all loggers if [hierarchicalLoggingEnabled] is
-/// false.
-Level _rootLevel = Level.INFO;
+/// The default [Level].
+const defaultLevel = Level.INFO;
 
 /// Use a [Logger] to log debug messages.
 ///
@@ -83,7 +80,9 @@ class Logger {
   Logger._internal(this.name, this.parent, Map<String, Logger> children)
       : _children = children,
         children = UnmodifiableMapView(children) {
-    if (parent != null) parent._children[name] = this;
+    if (parent != null) {
+      parent._children[name] = this;
+    }
   }
 
   /// Effective level considering the levels established in this logger's
@@ -93,7 +92,7 @@ class Logger {
       if (_level != null) return _level;
       if (parent != null) return parent.level;
     }
-    return _rootLevel;
+    return root._level;
   }
 
   /// Override the level for this particular [Logger] and its children.
@@ -106,7 +105,7 @@ class Logger {
             'Please set "hierarchicalLoggingEnabled" to true if you want to '
             'change the level on a non-root logger.');
       }
-      _rootLevel = value;
+      root._level = value;
     }
   }
 
@@ -235,7 +234,7 @@ class Logger {
   }
 
   /// Top-level root [Logger].
-  static final Logger root = Logger('');
+  static final Logger root = Logger('').._level = defaultLevel;
 
   /// All [Logger]s in the system.
   static final Map<String, Logger> _loggers = <String, Logger>{};
