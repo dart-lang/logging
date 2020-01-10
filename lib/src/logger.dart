@@ -80,9 +80,7 @@ class Logger {
   Logger._internal(this.name, this.parent, Map<String, Logger> children)
       : _children = children,
         children = UnmodifiableMapView(children) {
-    if (parent == null) {
-      _level = defaultLevel;
-    } else {
+    if (parent != null) {
       parent._children[name] = this;
     }
   }
@@ -236,7 +234,7 @@ class Logger {
   }
 
   /// Top-level root [Logger].
-  static final Logger root = Logger('');
+  static final Logger root = Logger('').._level = defaultLevel;
 
   /// All [Logger]s in the system.
   static final Map<String, Logger> _loggers = <String, Logger>{};
