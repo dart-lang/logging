@@ -90,17 +90,22 @@ class Logger {
   /// Effective level considering the levels established in this logger's
   /// parents (when [hierarchicalLoggingEnabled] is true).
   Level get level {
-    // `!hierarchicalLoggingEnabled` does not imply `_level == null`, so the
-    // order of the following checks matters.
+    Level effectiveLevel;
+
     if (parent == null) {
+      // We're either the root logger or a detached logger.  Return our own
+      // level.
+      effectiveLevel = _level;
     } else if (!hierarchicalLoggingEnabled) {
-      return root._level;
-    } else if (_level == null) {
-      return parent.level;
+      effectiveLevel = root._level;
+    } else if (_level != null) {
+      effectiveLevel = _level;
+    } else {
+      effectiveLevel = parent.level;
     }
 
-    assert(_level != null);
-    return _level;
+    assert(effectiveLevel != null);
+    return effectiveLevel;
   }
 
   /// Override the level for this particular [Logger] and its children.
