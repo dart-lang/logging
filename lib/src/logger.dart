@@ -98,10 +98,8 @@ class Logger {
       effectiveLevel = _level;
     } else if (!hierarchicalLoggingEnabled) {
       effectiveLevel = root._level;
-    } else if (_level != null) {
-      effectiveLevel = _level;
     } else {
-      effectiveLevel = parent.level;
+      effectiveLevel = _level ?? parent.level;
     }
 
     assert(effectiveLevel != null);
