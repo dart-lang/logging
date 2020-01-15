@@ -2,6 +2,7 @@
 
 * Add top level `defaultLevel`.
 * Require Dart `>=2.0.0`.
+* Make detached loggers work regardless of `hierarchicalLoggingEnabled`.
 
 ## 0.11.3+2
 
@@ -21,7 +22,7 @@
 
 ## 0.11.2
 
-* Added Logger.detached - a convenience factory to obtain a logger that is not
+* Added `Logger.detached` - a convenience factory to obtain a logger that is not
   attached to this library's logger hierarchy.
 
 ## 0.11.1+1

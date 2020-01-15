@@ -80,7 +80,9 @@ class Logger {
   Logger._internal(this.name, this.parent, Map<String, Logger> children)
       : _children = children,
         children = UnmodifiableMapView(children) {
-    if (parent != null) {
+    if (parent == null) {
+      _level = defaultLevel;
+    } else {
       parent._children[name] = this;
     }
   }
@@ -88,25 +90,30 @@ class Logger {
   /// Effective level considering the levels established in this logger's
   /// parents (when [hierarchicalLoggingEnabled] is true).
   Level get level {
-    if (hierarchicalLoggingEnabled) {
-      if (_level != null) return _level;
-      if (parent != null) return parent.level;
+    Level effectiveLevel;
+
+    if (parent == null) {
+      // We're either the root logger or a detached logger.  Return our own
+      // level.
+      effectiveLevel = _level;
+    } else if (!hierarchicalLoggingEnabled) {
+      effectiveLevel = root._level;
+    } else {
+      effectiveLevel = _level ?? parent.level;
     }
-    return root._level;
+
+    assert(effectiveLevel != null);
+    return effectiveLevel;
   }
 
   /// Override the level for this particular [Logger] and its children.
   set level(Level value) {
-    if (hierarchicalLoggingEnabled && parent != null) {
-      _level = value;
-    } else {
-      if (parent != null) {
-        throw UnsupportedError(
-            'Please set "hierarchicalLoggingEnabled" to true if you want to '
-            'change the level on a non-root logger.');
-      }
-      root._level = value;
+    if (!hierarchicalLoggingEnabled && parent != null) {
+      throw UnsupportedError(
+          'Please set "hierarchicalLoggingEnabled" to true if you want to '
+          'change the level on a non-root logger.');
     }
+    _level = value;
   }
 
   /// Returns a stream of messages added to this [Logger].
@@ -174,14 +181,16 @@ class Logger {
       var record =
           LogRecord(logLevel, msg, fullName, error, stackTrace, zone, object);
 
-      if (hierarchicalLoggingEnabled) {
+      if (parent == null) {
+        _publish(record);
+      } else if (!hierarchicalLoggingEnabled) {
+        root._publish(record);
+      } else {
         var target = this;
         while (target != null) {
           target._publish(record);
           target = target.parent;
         }
-      } else {
-        root._publish(record);
       }
     }
   }
@@ -234,7 +243,7 @@ class Logger {
   }
 
   /// Top-level root [Logger].
-  static final Logger root = Logger('').._level = defaultLevel;
+  static final Logger root = Logger('');
 
   /// All [Logger]s in the system.
   static final Map<String, Logger> _loggers = <String, Logger>{};

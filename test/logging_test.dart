@@ -10,6 +10,8 @@ import 'package:logging/logging.dart';
 import 'package:test/test.dart';
 
 void main() {
+  final hierarchicalLoggingEnabledDefault = hierarchicalLoggingEnabled;
+
   test('level comparison is a valid comparator', () {
     var level1 = const Level('NOT_REAL1', 253);
     expect(level1 == level1, isTrue);
@@ -213,6 +215,11 @@ void main() {
   });
 
   group('detached loggers', () {
+    tearDown(() {
+      hierarchicalLoggingEnabled = hierarchicalLoggingEnabledDefault;
+      Logger.root.level = defaultLevel;
+    });
+
     test('create new instances of Logger', () {
       var a1 = Logger.detached('a');
       var a2 = Logger.detached('a');
@@ -231,6 +238,51 @@ void main() {
     test('children is empty', () {
       var a = Logger.detached('a');
       expect(a.children, {});
+    });
+
+    test('have levels independent of the root level', () {
+      void testDetachedLoggerLevel(bool withHierarchy) {
+        hierarchicalLoggingEnabled = withHierarchy;
+
+        const newRootLevel = Level.ALL;
+        const newDetachedLevel = Level.OFF;
+
+        Logger.root.level = newRootLevel;
+
+        final detached = Logger.detached('a');
+        expect(detached.level, defaultLevel);
+        expect(Logger.root.level, newRootLevel);
+
+        detached.level = newDetachedLevel;
+        expect(detached.level, newDetachedLevel);
+        expect(Logger.root.level, newRootLevel);
+      }
+
+      testDetachedLoggerLevel(false);
+      testDetachedLoggerLevel(true);
+    });
+
+    test('log messages regardless of hierarchy', () {
+      void testDetachedLoggerOnRecord(bool withHierarchy) {
+        var calls = 0;
+        void handler(_) => calls += 1;
+
+        hierarchicalLoggingEnabled = withHierarchy;
+
+        final detached = Logger.detached('a');
+        detached.level = Level.ALL;
+        detached.onRecord.listen(handler);
+
+        Logger.root.info('foo');
+        expect(calls, 0);
+
+        detached.info('foo');
+        detached.info('foo');
+        expect(calls, 2);
+      }
+
+      testDetachedLoggerOnRecord(false);
+      testDetachedLoggerOnRecord(true);
     });
   });
 
@@ -292,6 +344,16 @@ void main() {
       expect(a.level, equals(Level.SHOUT));
       expect(b.level, equals(Level.FINE));
       expect(c.level, equals(Level.FINE));
+    });
+
+    test('loggers effective level - with changing hierarchy', () {
+      hierarchicalLoggingEnabled = true;
+      d.level = Level.SHOUT;
+      hierarchicalLoggingEnabled = false;
+
+      expect(root.level, Level.INFO);
+      expect(d.level, root.level);
+      expect(e.level, root.level);
     });
 
     test('isLoggable is appropriate', () {
