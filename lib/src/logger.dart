@@ -196,34 +196,58 @@ class Logger {
   }
 
   /// Log message at level [Level.FINEST].
+  ///
+  /// See [log] for information on how non-String [message] arguments are
+  /// handeled.
   void finest(message, [Object error, StackTrace stackTrace]) =>
       log(Level.FINEST, message, error, stackTrace);
 
   /// Log message at level [Level.FINER].
+  ///
+  /// See [log] for information on how non-String [message] arguments are
+  /// handeled.
   void finer(message, [Object error, StackTrace stackTrace]) =>
       log(Level.FINER, message, error, stackTrace);
 
   /// Log message at level [Level.FINE].
+  ///
+  /// See [log] for information on how non-String [message] arguments are
+  /// handeled.
   void fine(message, [Object error, StackTrace stackTrace]) =>
       log(Level.FINE, message, error, stackTrace);
 
   /// Log message at level [Level.CONFIG].
+  ///
+  /// See [log] for information on how non-String [message] arguments are
+  /// handeled.
   void config(message, [Object error, StackTrace stackTrace]) =>
       log(Level.CONFIG, message, error, stackTrace);
 
   /// Log message at level [Level.INFO].
+  ///
+  /// See [log] for information on how non-String [message] arguments are
+  /// handeled.
   void info(message, [Object error, StackTrace stackTrace]) =>
       log(Level.INFO, message, error, stackTrace);
 
   /// Log message at level [Level.WARNING].
+  ///
+  /// See [log] for information on how non-String [message] arguments are
+  /// handeled.
   void warning(message, [Object error, StackTrace stackTrace]) =>
       log(Level.WARNING, message, error, stackTrace);
 
   /// Log message at level [Level.SEVERE].
+  ///
+  /// See [log] for information on how non-String [message] arguments are
+  /// handeled.
   void severe(message, [Object error, StackTrace stackTrace]) =>
       log(Level.SEVERE, message, error, stackTrace);
 
   /// Log message at level [Level.SHOUT].
+  ///
+  /// See [log] for information on how non-String [message] arguments are
+  /// handeled.
   void shout(message, [Object error, StackTrace stackTrace]) =>
       log(Level.SHOUT, message, error, stackTrace);
 
