@@ -1,4 +1,6 @@
-## 0.11.5-dev
+## 1.0.0-dev
+
+* Migrate to null safety.
 
 ## 0.11.4
 
