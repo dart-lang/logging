@@ -27,7 +27,7 @@ class Logger {
 
   /// The full name of this logger, which includes the parent's full name.
   String get fullName =>
-      parent?.name.isNotEmpty == true ? '${parent!.fullName}.$name' : name;
+      parent?.name.isNotEmpty ?? false ? '${parent!.fullName}.$name' : name;
 
   /// Parent of this logger in the hierarchy of loggers.
   final Logger? parent;
@@ -110,11 +110,14 @@ class Logger {
       effectiveLevel = _level ?? parent!.level;
     }
 
-    assert((effectiveLevel as dynamic) != null);
+    // ignore: unnecessary_null_comparison
+    assert(effectiveLevel != null);
     return effectiveLevel;
   }
 
   /// Override the level for this particular [Logger] and its children.
+  ///
+  /// Setting this to `null` makes it inherit the [parent]s level.
   set level(Level? value) {
     if (!hierarchicalLoggingEnabled && parent != null) {
       throw UnsupportedError(
