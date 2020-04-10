@@ -7,6 +7,8 @@ analyzer:
     unused_import: error
     unused_local_variable: error
     dead_code: error
+  enable-experiment:
+    - non-nullable
 linter:
   rules:
     - annotate_overrides

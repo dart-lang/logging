@@ -10,7 +10,7 @@ class LogRecord {
   final String message;
 
   /// Non-string message passed to Logger.
-  final Object object;
+  final Object? object;
 
   /// Logger where this record is stored.
   final String loggerName;
@@ -24,13 +24,13 @@ class LogRecord {
   static int _nextNumber = 0;
 
   /// Associated error (if any) when recording errors messages.
-  final Object error;
+  final Object? error;
 
   /// Associated stackTrace (if any) when recording errors messages.
-  final StackTrace stackTrace;
+  final StackTrace? stackTrace;
 
   /// Zone of the calling code which resulted in this LogRecord.
-  final Zone zone;
+  final Zone? zone;
 
   LogRecord(this.level, this.message, this.loggerName,
       [this.error, this.stackTrace, this.zone, this.object])

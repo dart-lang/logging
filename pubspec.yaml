@@ -1,5 +1,5 @@
 name: logging
-version: 0.11.5-dev
+version: 1.0.0-dev
 
 description: >-
   Provides APIs for debugging and error logging. This library introduces
@@ -8,8 +8,74 @@ description: >-
 homepage: https://github.com/dart-lang/logging
 
 environment:
-  sdk: '>=2.0.0 <3.0.0'
+  sdk: '>=2.8.0-dev <3.0.0'
 
 dev_dependencies:
   pedantic: ^1.3.0
   test: ^1.3.0
+
+dependency_overrides:
+  # These are required to get a version solve since they depend on this package
+  coverage: ^0.13.3
+  webkit_inspection_protocol: ^0.5.0
+  # null safety overrides
+  async:
+    git:
+      url: git://github.com/dart-lang/async.git
+      ref: null_safety
+  boolean_selector:
+    git:
+      url: git://github.com/dart-lang/boolean_selector.git
+      ref: null_safety
+  charcode:
+    git:
+      url: git://github.com/dart-lang/charcode.git
+      ref: null_safety
+  collection:
+    git:
+      url: git://github.com/dart-lang/collection.git
+      ref: null_safety
+  matcher:
+    git:
+      url: git://github.com/dart-lang/matcher.git
+      ref: null_safety
+  meta:
+    git:
+      url: git://github.com/dart-lang/sdk.git
+      ref: null_safety-pkgs
+      path: pkg/meta
+  path:
+    git:
+      url: git://github.com/dart-lang/path.git
+      ref: null_safety
+  source_span:
+    git:
+      url: git://github.com/dart-lang/source_span.git
+      ref: null_safety
+  stack_trace:
+    git:
+      url: git://github.com/dart-lang/stack_trace.git
+      ref: null_safety
+  string_scanner:
+    git:
+      url: git://github.com/dart-lang/string_scanner.git
+      ref: null_safety
+  term_glyph:
+    git:
+      url: git://github.com/dart-lang/term_glyph.git
+      ref: null_safety
+  test_api:
+    git:
+      url: git://github.com/dart-lang/test.git
+      ref: null_safety
+      path: pkgs/test_api
+  test_core:
+    git:
+      url: git://github.com/dart-lang/test.git
+      ref: null_safety
+      path: pkgs/test_core
+  test:
+    git:
+      url: git://github.com/dart-lang/test.git
+      ref: null_safety
+      path: pkgs/test
