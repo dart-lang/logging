@@ -15,6 +15,10 @@ dev_dependencies:
   test: ^1.3.0
 
 dependency_overrides:
+  # These are required to get a version solve since they depend on this package
+  coverage: ^0.13.3
+  webkit_inspection_protocol: ^0.5.0
+  # null safety overrides
   async:
     git:
       url: git://github.com/dart-lang/async.git
