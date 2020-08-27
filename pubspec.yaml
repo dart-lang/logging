@@ -6,6 +6,9 @@ description: >-
   abstractions similar to those used in other languages, such as the Closure
   JS Logger and java.util.logging.Logger.
 homepage: https://github.com/dart-lang/logging
+# This package requires the unreleased null safety feature, and cannot be
+# published until that ships.
+publish_to: none
 
 environment:
   sdk: '>=2.10.0-0.0 <2.10.0'
