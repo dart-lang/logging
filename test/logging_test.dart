@@ -313,9 +313,15 @@ void main() {
     });
 
     test('cannot set level if hierarchy is disabled', () {
-      expect(() {
-        a.level = Level.FINE;
-      }, throwsUnsupportedError);
+      expect(() => a.level = Level.FINE, throwsUnsupportedError);
+    });
+
+    test('cannot set the level to null on the root logger', () {
+      expect(() => root.level = null, throwsUnsupportedError);
+    });
+
+    test('cannot set the level to null on a detached logger', () {
+      expect(() => Logger.detached('l').level = null, throwsUnsupportedError);
     });
 
     test('loggers effective level - no hierarchy', () {

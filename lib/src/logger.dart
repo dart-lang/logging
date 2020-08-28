@@ -124,6 +124,10 @@ class Logger {
           'Please set "hierarchicalLoggingEnabled" to true if you want to '
           'change the level on a non-root logger.');
     }
+    if (parent == null && value == null) {
+      throw UnsupportedError(
+          'Cannot set the level to `null` on a logger with no parent.');
+    }
     _level = value;
   }
 
