@@ -27,21 +27,29 @@ class Logger {
 
   /// The full name of this logger, which includes the parent's full name.
   String get fullName =>
-      (parent == null || parent.name == '') ? name : '${parent.fullName}.$name';
+      parent?.name.isNotEmpty ?? false ? '${parent!.fullName}.$name' : name;
 
   /// Parent of this logger in the hierarchy of loggers.
-  final Logger parent;
+  final Logger? parent;
 
   /// Logging [Level] used for entries generated on this logger.
-  Level _level;
+  ///
+  /// Only the root logger is guaranteed to have a non-null [Level].
+  Level? _level;
 
+  /// Private modifiable map of child loggers, indexed by their simple names.
   final Map<String, Logger> _children;
 
   /// Children in the hierarchy of loggers, indexed by their simple names.
+  ///
+  /// This is an unmodifiable map.
   final Map<String, Logger> children;
 
   /// Controller used to notify when log entries are added to this logger.
-  StreamController<LogRecord> _controller;
+  ///
+  /// If heirarchical logging is disabled then this is `null` for all but the
+  /// root [Logger].
+  StreamController<LogRecord>? _controller;
 
   /// Singleton constructor. Calling `new Logger(name)` will return the same
   /// actual instance whenever it is called with the same string name.
@@ -65,7 +73,7 @@ class Logger {
     }
     // Split hierarchical names (separated with '.').
     var dot = name.lastIndexOf('.');
-    Logger parent;
+    Logger? parent;
     String thisName;
     if (dot == -1) {
       if (name != '') parent = Logger('');
@@ -83,7 +91,7 @@ class Logger {
     if (parent == null) {
       _level = defaultLevel;
     } else {
-      parent._children[name] = this;
+      parent!._children[name] = this;
     }
   }
 
@@ -95,23 +103,30 @@ class Logger {
     if (parent == null) {
       // We're either the root logger or a detached logger.  Return our own
       // level.
-      effectiveLevel = _level;
+      effectiveLevel = _level!;
     } else if (!hierarchicalLoggingEnabled) {
-      effectiveLevel = root._level;
+      effectiveLevel = root._level!;
     } else {
-      effectiveLevel = _level ?? parent.level;
+      effectiveLevel = _level ?? parent!.level;
     }
 
+    // ignore: unnecessary_null_comparison
     assert(effectiveLevel != null);
     return effectiveLevel;
   }
 
   /// Override the level for this particular [Logger] and its children.
-  set level(Level value) {
+  ///
+  /// Setting this to `null` makes it inherit the [parent]s level.
+  set level(Level? value) {
     if (!hierarchicalLoggingEnabled && parent != null) {
       throw UnsupportedError(
           'Please set "hierarchicalLoggingEnabled" to true if you want to '
           'change the level on a non-root logger.');
+    }
+    if (parent == null && value == null) {
+      throw UnsupportedError(
+          'Cannot set the level to `null` on a logger with no parent.');
     }
     _level = value;
   }
@@ -127,10 +142,8 @@ class Logger {
 
   void clearListeners() {
     if (hierarchicalLoggingEnabled || parent == null) {
-      if (_controller != null) {
-        _controller.close();
-        _controller = null;
-      }
+      _controller?.close();
+      _controller = null;
     } else {
       root.clearListeners();
     }
@@ -156,9 +169,9 @@ class Logger {
   /// was made. This can be advantageous if a log listener wants to handler
   /// records of different zones differently (e.g. group log records by HTTP
   /// request if each HTTP request handler runs in it's own zone).
-  void log(Level logLevel, message,
-      [Object error, StackTrace stackTrace, Zone zone]) {
-    Object object;
+  void log(Level logLevel, Object? message,
+      [Object? error, StackTrace? stackTrace, Zone? zone]) {
+    Object? object;
     if (isLoggable(logLevel)) {
       if (message is Function) {
         message = message();
@@ -186,7 +199,7 @@ class Logger {
       } else if (!hierarchicalLoggingEnabled) {
         root._publish(record);
       } else {
-        var target = this;
+        Logger? target = this;
         while (target != null) {
           target._publish(record);
           target = target.parent;
@@ -199,72 +212,68 @@ class Logger {
   ///
   /// See [log] for information on how non-String [message] arguments are
   /// handeled.
-  void finest(message, [Object error, StackTrace stackTrace]) =>
+  void finest(message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.FINEST, message, error, stackTrace);
 
   /// Log message at level [Level.FINER].
   ///
   /// See [log] for information on how non-String [message] arguments are
   /// handeled.
-  void finer(message, [Object error, StackTrace stackTrace]) =>
+  void finer(message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.FINER, message, error, stackTrace);
 
   /// Log message at level [Level.FINE].
   ///
   /// See [log] for information on how non-String [message] arguments are
   /// handeled.
-  void fine(message, [Object error, StackTrace stackTrace]) =>
+  void fine(message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.FINE, message, error, stackTrace);
 
   /// Log message at level [Level.CONFIG].
   ///
   /// See [log] for information on how non-String [message] arguments are
   /// handeled.
-  void config(message, [Object error, StackTrace stackTrace]) =>
+  void config(message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.CONFIG, message, error, stackTrace);
 
   /// Log message at level [Level.INFO].
   ///
   /// See [log] for information on how non-String [message] arguments are
   /// handeled.
-  void info(message, [Object error, StackTrace stackTrace]) =>
+  void info(message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.INFO, message, error, stackTrace);
 
   /// Log message at level [Level.WARNING].
   ///
   /// See [log] for information on how non-String [message] arguments are
   /// handeled.
-  void warning(message, [Object error, StackTrace stackTrace]) =>
+  void warning(message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.WARNING, message, error, stackTrace);
 
   /// Log message at level [Level.SEVERE].
   ///
   /// See [log] for information on how non-String [message] arguments are
   /// handeled.
-  void severe(message, [Object error, StackTrace stackTrace]) =>
+  void severe(message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.SEVERE, message, error, stackTrace);
 
   /// Log message at level [Level.SHOUT].
   ///
   /// See [log] for information on how non-String [message] arguments are
   /// handeled.
-  void shout(message, [Object error, StackTrace stackTrace]) =>
+  void shout(message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.SHOUT, message, error, stackTrace);
 
   Stream<LogRecord> _getStream() {
     if (hierarchicalLoggingEnabled || parent == null) {
-      _controller ??= StreamController<LogRecord>.broadcast(sync: true);
-      return _controller.stream;
+      return (_controller ??= StreamController<LogRecord>.broadcast(sync: true))
+          .stream;
     } else {
       return root._getStream();
     }
   }
 
-  void _publish(LogRecord record) {
-    if (_controller != null) {
-      _controller.add(record);
-    }
-  }
+  void _publish(LogRecord record) => _controller?.add(record);
 
   /// Top-level root [Logger].
   static final Logger root = Logger('');
