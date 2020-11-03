@@ -11,7 +11,7 @@ homepage: https://github.com/dart-lang/logging
 publish_to: none
 
 environment:
-  sdk: '>=2.10.0-0.0 <2.11.0'
+  sdk: '>=2.10.0-0.0 <2.12.0'
 
 dev_dependencies:
   pedantic: ^1.10.0-nullsafety
