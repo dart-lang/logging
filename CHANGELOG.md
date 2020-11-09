@@ -1,6 +1,7 @@
-## 1.0.0-nullsafety-dev
+## 1.0.0-nullsafety.0
 
 * Migrate to null safety.
+* Removed the deprecated `LoggerHandler` typedef. 
 
 ## 0.11.4
 

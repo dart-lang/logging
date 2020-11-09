@@ -1,5 +1,5 @@
 name: logging
-version: 1.0.0-nullsafety-dev
+version: 1.0.0-nullsafety.0
 
 description: >-
   Provides APIs for debugging and error logging. This library introduces
@@ -11,7 +11,7 @@ homepage: https://github.com/dart-lang/logging
 publish_to: none
 
 environment:
-  sdk: '>=2.10.0-0.0 <2.12.0'
+  sdk: '>=2.12.0-0 <3.0.0'
 
 dev_dependencies:
   pedantic: ^1.10.0-nullsafety
