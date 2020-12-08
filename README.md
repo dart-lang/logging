@@ -16,7 +16,7 @@ Logger.root.onRecord.listen((record) {
 });
 ```
 
-First, set the root `Level`. All messages at or above the level are sent to the
+First, set the root `Level`. All messages at or above the current level are sent to the
 `onRecord` stream. Available levels are:
 
 + `Level.OFF`
