@@ -1,3 +1,7 @@
+## 1.0.1
+
+* List log levels in README.
+
 ## 1.0.0
 
 * Stable null safety release.
