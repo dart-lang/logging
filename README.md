@@ -16,8 +16,18 @@ Logger.root.onRecord.listen((record) {
 });
 ```
 
-First, set the root `Level`. All messages at or above the level are sent to the
-`onRecord` stream.
+First, set the root `Level`. All messages at or above the current level are sent to the
+`onRecord` stream. Available levels are:
+
++ `Level.OFF`
++ `Level.SHOUT`
++ `Level.SEVERE`
++ `Level.WARNING`
++ `Level.INFO`
++ `Level.CONFIG`
++ `Level.FINE`
++ `Level.FINER`
++ `Level.FINEST`
 
 Then, listen on the `onRecord` stream for `LogRecord` events. The `LogRecord`
 class has various properties for the message, error, logger name, and more.
@@ -47,4 +57,13 @@ evaluated only if the message is actually logged:
 log.fine(() => [1, 2, 3, 4, 5].map((e) => e * 4).join("-"));
 ```
 
-See the `Logger` class for the different logging methods.
+Available logging methods are:
+
++ `log.shout(logged_content);`
++ `log.severe(logged_content);`
++ `log.warning(logged_content);`
++ `log.info(logged_content);`
++ `log.config(logged_content);`
++ `log.fine(logged_content);`
++ `log.finer(logged_content);`
++ `log.finest(logged_content);`
