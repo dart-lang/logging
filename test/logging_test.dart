@@ -605,7 +605,7 @@ void main() {
       });
 
       var callCount = 0;
-      var myClosure = () => '${++callCount}';
+      String myClosure() => '${++callCount}';
 
       root.info(myClosure);
       root.finer(myClosure); // Should not get evaluated.
