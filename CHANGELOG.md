@@ -1,3 +1,5 @@
+## 1.0.2-dev
+
 ## 1.0.1
 
 * List log levels in README.
@@ -9,7 +11,7 @@
 ## 1.0.0-nullsafety.0
 
 * Migrate to null safety.
-* Removed the deprecated `LoggerHandler` typedef. 
+* Removed the deprecated `LoggerHandler` typedef.
 
 ## 0.11.4
 
