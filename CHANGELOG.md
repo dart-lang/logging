@@ -1,4 +1,7 @@
-## 1.0.2-dev
+## 1.0.2
+
+* Update description.
+* Add example.
 
 ## 1.0.1
 
