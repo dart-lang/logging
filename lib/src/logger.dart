@@ -280,4 +280,5 @@ class Logger {
 
   /// All [Logger]s in the system.
   static final Map<String, Logger> _loggers = <String, Logger>{};
+  static final Map<String, Logger> loggers = UnmodifiableMapView(_loggers);
 }
