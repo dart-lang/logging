@@ -1,4 +1,5 @@
 include: package:lints/recommended.yaml
+
 analyzer:
   strong-mode:
     implicit-casts: false
@@ -6,6 +7,7 @@ analyzer:
 linter:
   rules:
     - annotate_overrides
+    - avoid_dynamic_calls
     - avoid_function_literals_in_foreach_calls
     - avoid_init_to_null
     - avoid_null_checks_in_equality_operators
