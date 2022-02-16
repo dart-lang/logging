@@ -51,8 +51,11 @@ class Logger {
   /// root [Logger].
   StreamController<LogRecord>? _controller;
 
-  /// Singleton constructor. Calling `new Logger(name)` will return the same
-  /// actual instance whenever it is called with the same string name.
+  /// Create or find a Logger by name.
+  ///
+  /// Calling `Logger(name)` will return the same instance whenever it is called
+  /// with the same string name. Loggers created with this constructor are
+  /// retained indefinitely and available through [attachedLoggers];
   factory Logger(String name) =>
       _loggers.putIfAbsent(name, () => Logger._named(name));
 
@@ -278,6 +281,11 @@ class Logger {
   /// Top-level root [Logger].
   static final Logger root = Logger('');
 
-  /// All [Logger]s in the system.
+  /// All attached [Logger]s in the system.
   static final Map<String, Logger> _loggers = <String, Logger>{};
+
+  /// All attached [Logger]s in the system.
+  ///
+  /// Loggers created with [Logger.detached] are not included.
+  static Iterable<Logger> get attachedLoggers => _loggers.values;
 }

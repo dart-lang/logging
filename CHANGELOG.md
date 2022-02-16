@@ -1,5 +1,7 @@
-## 1.0.3-dev
+## 1.1.0
 
+* Add `Logger.attachedLoggers` which exposes all loggers created with the
+  default constructor.
 * Enable the `avoid_dynamic_calls` lint.
 
 ## 1.0.2
