@@ -1,3 +1,8 @@
+## 1.1.0
+
+* Add `Logger.attachedLoggers` which exposes all loggers created with the
+  default constructor.
+
 ## 1.0.2
 
 * Update description.
