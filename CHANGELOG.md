@@ -1,4 +1,4 @@
-## 1.0.3-dev
+## 1.0.3
 
 * Enable the `avoid_dynamic_calls` lint.
 
