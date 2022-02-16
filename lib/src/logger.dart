@@ -174,7 +174,7 @@ class Logger {
     Object? object;
     if (isLoggable(logLevel)) {
       if (message is Function) {
-        message = message();
+        message = (message as Object? Function())();
       }
 
       String msg;

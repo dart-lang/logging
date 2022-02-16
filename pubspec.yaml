@@ -1,5 +1,5 @@
 name: logging
-version: 1.0.2
+version: 1.0.3-dev
 
 description: >-
   Provides APIs for debugging and error logging, similar to loggers in other

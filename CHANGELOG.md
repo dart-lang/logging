@@ -1,3 +1,7 @@
+## 1.0.3-dev
+
+* Enable the `avoid_dynamic_calls` lint.
+
 ## 1.0.2
 
 * Update description.
