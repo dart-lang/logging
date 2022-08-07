@@ -1,3 +1,8 @@
+## 1.2.0
+
+* Add `Logger.cancelLogging` which clear listeners for the current logger,
+  and, when `hierarchicalLoggingEnabled` is true, for all children of the current logger. 
+
 ## 1.1.0
 
 * Add `Logger.attachedLoggers` which exposes all loggers created with the
