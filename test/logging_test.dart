@@ -167,6 +167,31 @@ void main() {
     expect(shout.stackTrace, isNull);
   });
 
+  test('could not add event when logging is canceled', () {
+    final root = Logger.root;
+    final records = <LogRecord>[];
+    recordStackTraceAtLevel = Level.ALL;
+    root.onRecord.listen(records.add);
+
+    root.cancelLogging();
+
+    root.severe('hello');
+    root.warning('hello');
+    root.info('hello');
+    expect(records, hasLength(0));
+  });
+
+  test('new events added well when logging is restored', () {
+    final root = Logger.root;
+    final records = <LogRecord>[];
+    recordStackTraceAtLevel = Level.ALL;
+    root.onRecord.listen(records.add);
+    root.severe('hello');
+    root.warning('hello');
+    root.info('hello');
+    expect(records, hasLength(3));
+  });
+
   group('zone gets recorded to LogRecord', () {
     test('root zone', () {
       var root = Logger.root;
@@ -594,6 +619,81 @@ void main() {
             // 'FINE: 8' is not loggable
             'WARNING: 9',
             'SHOUT: 10'
+          ]));
+    });
+
+    test('message logging - with hierarchy and cancel logging', () {
+      hierarchicalLoggingEnabled = true;
+
+      root.cancelLogging();
+
+      root.level = Level.ALL;
+
+      final rootMessages = [];
+      final bMessages = [];
+      final aMessages = [];
+      final cMessages = [];
+      root.onRecord.listen((record) {
+        rootMessages.add('${record.level}: ${record.message}');
+      });
+      a.onRecord.listen((record) {
+        aMessages.add('${record.level}: ${record.message}');
+      });
+      c.onRecord.listen((record) {
+        cMessages.add('${record.level}: ${record.message}');
+      });
+
+      root.info('1');
+      root.fine('2');
+      root.shout('3');
+
+      b.info('4');
+
+      a.cancelLogging();
+
+      b.severe('5');
+      b.warning('6');
+
+      b.onRecord.listen((record) {
+        bMessages.add('${record.level}: ${record.message}');
+      });
+
+      b.fine('7');
+
+      c.fine('8');
+      c.warning('9');
+      c.shout('10');
+
+      expect(
+          rootMessages,
+          equals([
+            'INFO: 1',
+            'FINE: 2',
+            'SHOUT: 3',
+            'INFO: 4',
+            'SEVERE: 5',
+            'WARNING: 6',
+            'FINE: 7',
+            'FINE: 8',
+            'WARNING: 9',
+            'SHOUT: 10'
+          ]));
+
+      expect(
+          aMessages,
+          equals([
+            'INFO: 4',
+          ]));
+
+      expect(cMessages, equals([]));
+
+      expect(
+          bMessages,
+          equals([
+            'FINE: 7',
+            'FINE: 8',
+            'WARNING: 9',
+            'SHOUT: 10',
           ]));
     });
 

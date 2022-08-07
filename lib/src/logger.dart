@@ -143,10 +143,32 @@ class Logger {
   /// ```
   Stream<LogRecord> get onRecord => _getStream();
 
+  /// Allow to cancel logging for current logger and its children
+  /// if [hierarchicalLoggingEnabled] is true.
+  /// To start listen for messages again with current logger
+  /// you should create new subscription(and for any child if required):
+  ///
+  /// ```dart
+  /// logger.onRecord.listen((record) { ... });
+  /// ```
+  ///
+  void cancelLogging() {
+    _clearListeners();
+    if (hierarchicalLoggingEnabled) {
+      for (final logger in _children.values) {
+        logger.cancelLogging();
+      }
+    }
+  }
+
+  void _clearListeners() {
+    _controller?.close();
+    _controller = null;
+  }
+
   void clearListeners() {
     if (hierarchicalLoggingEnabled || parent == null) {
-      _controller?.close();
-      _controller = null;
+      _clearListeners();
     } else {
       root.clearListeners();
     }
