@@ -1,5 +1,6 @@
 [![Build Status](https://github.com/dart-lang/logging/workflows/Dart%20CI/badge.svg)](https://github.com/dart-lang/logging/actions?query=workflow%3A"Dart+CI"+branch%3Amaster)
 [![Pub](https://img.shields.io/pub/v/logging.svg)](https://pub.dev/packages/logging)
+[![package publisher](https://img.shields.io/pub/publisher/logging.svg)](https://pub.dev/packages/logging/publisher)
 
 ## Initializing
 
