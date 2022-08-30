@@ -1,3 +1,7 @@
+// Copyright (c) 2019, the Dart project authors. Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
+
 import 'dart:async';
 import 'dart:collection';
 
@@ -55,7 +59,7 @@ class Logger {
   ///
   /// Calling `Logger(name)` will return the same instance whenever it is called
   /// with the same string name. Loggers created with this constructor are
-  /// retained indefinitely and available through [attachedLoggers];
+  /// retained indefinitely and available through [attachedLoggers].
   factory Logger(String name) =>
       _loggers.putIfAbsent(name, () => Logger._named(name));
 
