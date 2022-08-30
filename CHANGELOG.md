@@ -1,4 +1,4 @@
-## 2.0.0
+## 1.2.0
 
 * Add `Logger.cancelLogging` which clear listeners for the current logger,
   and, when `hierarchicalLoggingEnabled` is true, for all children of the current logger. 
