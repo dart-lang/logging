@@ -167,30 +167,49 @@ void main() {
     expect(shout.stackTrace, isNull);
   });
 
-  test('could not add event when logging is canceled', () {
-    final root = Logger.root;
-    final records = <LogRecord>[];
-    recordStackTraceAtLevel = Level.ALL;
-    root.onRecord.listen(records.add);
+  group(
+    'cancelLogging',
+    () {
+      final root = Logger.root;
+      final records = <LogRecord>[];
 
-    root.cancelLogging();
+      setUp(() {
+        records.clear();
+        recordStackTraceAtLevel = Level.ALL;
+      });
 
-    root.severe('hello');
-    root.warning('hello');
-    root.info('hello');
-    expect(records, hasLength(0));
-  });
+      tearDown(() {
+        recordStackTraceAtLevel = Level.OFF;
+        root.clearListeners();
+      });
 
-  test('new events added well when logging is restored', () {
-    final root = Logger.root;
-    final records = <LogRecord>[];
-    recordStackTraceAtLevel = Level.ALL;
-    root.onRecord.listen(records.add);
-    root.severe('hello');
-    root.warning('hello');
-    root.info('hello');
-    expect(records, hasLength(3));
-  });
+      test('could not add event when logging is canceled', () {
+        root.onRecord.listen(records.add);
+
+        root.cancelLogging();
+
+        root.severe('hello');
+        root.warning('hello');
+        root.info('hello');
+
+        expect(records, hasLength(0));
+      });
+
+      test('new events added well when logging is restored', () {
+        root.onRecord.listen(records.add);
+
+        root.cancelLogging();
+
+        root.onRecord.listen(records.add);
+
+        root.severe('hello');
+        root.warning('hello');
+        root.info('hello');
+
+        expect(records, hasLength(3));
+      });
+    },
+  );
 
   group('zone gets recorded to LogRecord', () {
     test('root zone', () {
