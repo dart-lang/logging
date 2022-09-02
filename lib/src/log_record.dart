@@ -13,6 +13,9 @@ class LogRecord {
   final Level level;
   final String message;
 
+  /// Meta Data to pass additional information
+  final Map<String, dynamic>? metaData;
+
   /// Non-string message passed to Logger.
   final Object? object;
 
@@ -37,7 +40,7 @@ class LogRecord {
   final Zone? zone;
 
   LogRecord(this.level, this.message, this.loggerName,
-      [this.error, this.stackTrace, this.zone, this.object])
+      [this.error, this.stackTrace, this.zone, this.object, this.metaData])
       : time = DateTime.now(),
         sequenceNumber = LogRecord._nextNumber++;
 
