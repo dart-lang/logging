@@ -75,6 +75,11 @@ void main() {
     expect(() => Logger('.c'), throwsArgumentError);
   });
 
+  test('logger name cannot end with a "."', () {
+    expect(() => Logger('a.'), throwsArgumentError);
+    expect(() => Logger('a..d'), throwsArgumentError);
+  });
+
   test('root level has proper defaults', () {
     expect(Logger.root, isNotNull);
     expect(Logger.root.parent, null);
