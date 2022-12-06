@@ -78,6 +78,10 @@ class Logger {
     if (name.startsWith('.')) {
       throw ArgumentError("name shouldn't start with a '.'");
     }
+    if (name.endsWith('.')) {
+      throw ArgumentError("name shouldn't end with a '.'");
+    }
+
     // Split hierarchical names (separated with '.').
     var dot = name.lastIndexOf('.');
     Logger? parent;
