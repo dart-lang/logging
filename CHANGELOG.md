@@ -1,3 +1,7 @@
+## 1.1.1-dev
+
+* Add a check that throws if a logger name ends with '.'.
+
 ## 1.1.0
 
 * Add `Logger.attachedLoggers` which exposes all loggers created with the
