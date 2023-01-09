@@ -83,7 +83,7 @@ class Logger {
     }
 
     // Split hierarchical names (separated with '.').
-    var dot = name.lastIndexOf('.');
+    final dot = name.lastIndexOf('.');
     Logger? parent;
     String thisName;
     if (dot == -1) {
@@ -161,7 +161,7 @@ class Logger {
   }
 
   /// Whether a message for [value]'s level is loggable in this logger.
-  bool isLoggable(Level value) => (value >= level);
+  bool isLoggable(Level value) => value >= level;
 
   /// Adds a log record for a [message] at a particular [logLevel] if
   /// `isLoggable(logLevel)` is true.
@@ -202,7 +202,7 @@ class Logger {
       }
       zone ??= Zone.current;
 
-      var record =
+      final record =
           LogRecord(logLevel, msg, fullName, error, stackTrace, zone, object);
 
       if (parent == null) {
