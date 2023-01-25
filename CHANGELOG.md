@@ -1,4 +1,4 @@
-## 1.1.1-dev
+## 1.1.1
 
 * Add a check that throws if a logger name ends with '.'.
 * Require Dart 2.18
