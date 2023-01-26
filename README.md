@@ -68,3 +68,8 @@ Available logging methods are:
 + `log.fine(logged_content);`
 + `log.finer(logged_content);`
 + `log.finest(logged_content);`
+
+## Publishing automation
+
+For information about our publishing automation and release process, see
+https://github.com/dart-lang/ecosystem/wiki/Publishing-automation.
