@@ -1,3 +1,7 @@
+## 1.1.2-wip
+
+* Require Dart 2.19.
+
 ## 1.1.1
 
 * Add a check that throws if a logger name ends with '.'.
