@@ -714,5 +714,15 @@ void main() {
       expect(records[1].error, isNotNull);
       expect(records[2].error, isNull);
     });
+
+    test('listen for level changed', () {
+      final levels = <Level?>[];
+      root.level = Level.ALL;
+      root.onLevelChanged.listen(levels.add);
+      root.level = Level.SEVERE;
+      root.level = Level.WARNING;
+      expect(levels, hasLength(2));
+    });
+
   });
 }
