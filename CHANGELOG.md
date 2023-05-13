@@ -1,9 +1,6 @@
-## NEXT
-
-* Add notification when the log level is changed. Logger `onLevelChanged` broadcasts a stream of level values.
-
 ## 1.1.2-wip
 
+* Add notification when the log level is changed. Logger `onLevelChanged` broadcasts a stream of level values.
 * Require Dart 2.19.
 
 ## 1.1.1
