@@ -724,5 +724,22 @@ void main() {
       expect(levels, hasLength(2));
     });
 
+    test('onLevelChanged is not emited if set the level to the same value', () {
+      final levels = <Level?>[];
+      root.level = Level.ALL;
+      root.onLevelChanged.listen(levels.add);
+      root.level = Level.ALL;
+      expect(levels, hasLength(0));
+    });
+
+    test('setting level in a loop throws state error', () {
+      root.level = Level.ALL;
+      root.onLevelChanged.listen((event) {
+        // Cannot fire new event. Controller is already firing an event
+        expect(() => root.level = Level.SEVERE, throwsStateError);
+      });
+      root.level = Level.WARNING;
+      expect(root.level, Level.SEVERE);
+    });
   });
 }

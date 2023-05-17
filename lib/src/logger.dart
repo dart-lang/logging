@@ -151,11 +151,14 @@ class Logger {
 
   /// Returns a stream of level values set to this [Logger].
   ///
-  /// You can listen for set levels using the standard stream APIs, for instance:
+  /// You can listen for set levels using the standard stream APIs,
+  /// for instance:
   ///
   /// ```dart
   /// logger.onLevelChanged.listen((level) { ... });
   /// ```
+  /// A state error will be thrown if the level is changed
+  /// inside the callback.
   Stream<Level?> get onLevelChanged {
     _levelChangedController ??= StreamController<Level?>.broadcast(sync: true);
     return _levelChangedController!.stream;
