@@ -1,5 +1,5 @@
 name: logging
-version: 1.1.2-wip
+version: 1.2.0-wip
 description: >-
   Provides APIs for debugging and error logging, similar to loggers in other
   languages, such as the Closure JS Logger and java.util.logging.Logger.

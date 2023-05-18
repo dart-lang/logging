@@ -55,6 +55,9 @@ class Logger {
   /// root [Logger].
   StreamController<LogRecord>? _controller;
 
+  /// Controller used to notify when the log level of this logger is changed.
+  StreamController<Level?>? _levelChangedController;
+
   /// Create or find a Logger by name.
   ///
   /// Calling `Logger(name)` will return the same instance whenever it is called
@@ -139,7 +142,26 @@ class Logger {
       throw UnsupportedError(
           'Cannot set the level to `null` on a logger with no parent.');
     }
+    final isLevelChanged = _level != value;
     _level = value;
+    if (isLevelChanged) {
+      _levelChangedController?.add(value);
+    }
+  }
+
+  /// Returns a stream of level values set to this [Logger].
+  ///
+  /// You can listen for set levels using the standard stream APIs,
+  /// for instance:
+  ///
+  /// ```dart
+  /// logger.onLevelChanged.listen((level) { ... });
+  /// ```
+  /// A state error will be thrown if the level is changed
+  /// inside the callback.
+  Stream<Level?> get onLevelChanged {
+    _levelChangedController ??= StreamController<Level?>.broadcast(sync: true);
+    return _levelChangedController!.stream;
   }
 
   /// Returns a stream of messages added to this [Logger].
