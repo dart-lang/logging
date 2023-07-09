@@ -77,6 +77,56 @@ Available logging methods are:
 + `log.finer(logged_content);`
 + `log.finest(logged_content);`
 
+## Configuration
+
+Loggers can be individually configured and listened to. When an individual logger has no
+specific configuration, it uses the configuration and any listeners found at `Logger.root`.
+
+To begin, set the global boolean `hierarchicalLoggingEnabled` to `true`.
+
+Then, create unique loggers and configure their `level` attributes and assign any listeners to
+their `onRecord` streams.
+
+
+```dart
+hierarchicalLoggingEnabled = true;
+
+Logger.root.level = Level.FINE;
+
+final log1 = Logger('WARNING+');
+log1.level = Level.WARNING;
+Logger.root.onRecord.listen((record) {
+  print('[WARNING+] ${record.message}');
+});
+
+final log2 = Logger('FINE+'); // Inherited from `Logger.root`
+log2.onRecord.listen((record) {
+  print('[FINE+]    ${record.message}');
+});
+
+log1.info('Will not print because too low level');
+log2.info(
+  'WILL print TWICE ([FINE+] and [WARNING+]) '
+  'because `log2` uses individual and root listeners',
+);
+
+log1.warning('WILL print ONCE because `log1` only uses root listener');
+log2.warning(
+  'WILL print TWICE because `log2` '
+  'uses individual and root listeners',
+);
+```
+
+Results in:
+
+```
+[FINE+]    WILL print TWICE ([FINE+] and [WARNING+]) because `log2` uses individual and root listeners
+[WARNING+] WILL print TWICE ([FINE+] and [WARNING+]) because `log2` uses individual and root listeners
+[WARNING+] WILL print ONCE because `log1` only uses root listener
+[FINE+]    WILL print TWICE because `log2` uses individual and root listeners
+[WARNING+] WILL print TWICE because `log2` uses individual and root listeners
+```
+
 ## Publishing automation
 
 For information about our publishing automation and release process, see
