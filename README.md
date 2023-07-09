@@ -89,42 +89,55 @@ their `onRecord` streams.
 
 
 ```dart
-hierarchicalLoggingEnabled = true;
+  hierarchicalLoggingEnabled = true;
+  Logger.root.level = Level.WARNING;
+  Logger.root.onRecord.listen((record) {
+    print('[ROOT][WARNING+] ${record.message}');
+  });
 
-Logger.root.level = Level.FINE;
+  final log1 = Logger('FINE+');
+  log1.level = Level.FINE;
+  log1.onRecord.listen((record) {
+    print('[LOG1][FINE+] ${record.message}');
+  });
 
-final log1 = Logger('WARNING+');
-log1.level = Level.WARNING;
-Logger.root.onRecord.listen((record) {
-  print('[WARNING+] ${record.message}');
-});
+  // log2 inherits LEVEL value of WARNING from `Logger.root`
+  final log2 = Logger('WARNING+');
+  log2.onRecord.listen((record) {
+    print('[LOG2][WARNING+] ${record.message}');
+  });
 
-final log2 = Logger('FINE+'); // Inherited from `Logger.root`
-log2.onRecord.listen((record) {
-  print('[FINE+]    ${record.message}');
-});
 
-log1.info('Will not print because too low level');
-log2.info(
-  'WILL print TWICE ([FINE+] and [WARNING+]) '
-  'because `log2` uses individual and root listeners',
-);
+  // Will NOT print because FINER is too low level for `Logger.root`.
+  log1.finer('LOG_01 FINER (X)');
 
-log1.warning('WILL print ONCE because `log1` only uses root listener');
-log2.warning(
-  'WILL print TWICE because `log2` '
-  'uses individual and root listeners',
-);
+  // Will print twice ([LOG1] & [ROOT])
+  log1.fine('LOG_01 FINE (√√)');
+
+  // Will print ONCE because `log1` only uses root listener.
+  log1.warning('LOG_01 WARNING (√)');
+
+  // Will never print because FINE is too low level.
+  log2.fine('LOG_02 FINE (X)');
+
+  // Will print twice ([LOG2] & [ROOT]) because warning is sufficient for all
+  // loggers' levels.
+  log2.warning('LOG_02 WARNING (√√)');
+
+  // Will never print because `info` is filtered by `Logger.root.level` of
+  // `Level.WARNING`.
+  log2.info('INFO (X)');
 ```
 
 Results in:
 
 ```
-[FINE+]    WILL print TWICE ([FINE+] and [WARNING+]) because `log2` uses individual and root listeners
-[WARNING+] WILL print TWICE ([FINE+] and [WARNING+]) because `log2` uses individual and root listeners
-[WARNING+] WILL print ONCE because `log1` only uses root listener
-[FINE+]    WILL print TWICE because `log2` uses individual and root listeners
-[WARNING+] WILL print TWICE because `log2` uses individual and root listeners
+[LOG1][FINE+] LOG_01 FINE (√√)
+[ROOT][WARNING+] LOG_01 FINE (√√)
+[LOG1][FINE+] LOG_01 WARNING (√)
+[ROOT][WARNING+] LOG_01 WARNING (√)
+[LOG2][WARNING+] LOG_02 WARNING (√√)
+[ROOT][WARNING+] LOG_02 WARNING (√√)
 ```
 
 ## Publishing automation
