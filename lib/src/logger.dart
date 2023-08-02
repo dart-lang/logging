@@ -208,7 +208,7 @@ class Logger {
     Object? error,
     StackTrace? stackTrace,
     Zone? zone,
-    Map<String, dynamic>? metaData,
+    Object? metaData,
   ]) {
     Object? object;
     if (isLoggable(logLevel)) {
@@ -255,7 +255,7 @@ class Logger {
     Object? message, [
     Object? error,
     StackTrace? stackTrace,
-    Map<String, dynamic>? metaData,
+    Object? metaData,
   ]) =>
       log(Level.FINEST, message, error, stackTrace, null, metaData);
 
@@ -267,7 +267,7 @@ class Logger {
     Object? message, [
     Object? error,
     StackTrace? stackTrace,
-    Map<String, dynamic>? metaData,
+    Object? metaData,
   ]) =>
       log(Level.FINER, message, error, stackTrace, null, metaData);
 
@@ -279,7 +279,7 @@ class Logger {
     Object? message, [
     Object? error,
     StackTrace? stackTrace,
-    Map<String, dynamic>? metaData,
+    Object? metaData,
   ]) =>
       log(Level.FINE, message, error, stackTrace, null, metaData);
 
@@ -291,7 +291,7 @@ class Logger {
     Object? message, [
     Object? error,
     StackTrace? stackTrace,
-    Map<String, dynamic>? metaData,
+    Object? metaData,
   ]) =>
       log(Level.CONFIG, message, error, stackTrace, null, metaData);
 
@@ -303,7 +303,7 @@ class Logger {
     Object? message, [
     Object? error,
     StackTrace? stackTrace,
-    Map<String, dynamic>? metaData,
+    Object? metaData,
   ]) =>
       log(Level.INFO, message, error, stackTrace, null, metaData);
 
@@ -315,7 +315,7 @@ class Logger {
     Object? message, [
     Object? error,
     StackTrace? stackTrace,
-    Map<String, dynamic>? metaData,
+    Object? metaData,
   ]) =>
       log(Level.WARNING, message, error, stackTrace, null, metaData);
 
@@ -327,7 +327,7 @@ class Logger {
     Object? message, [
     Object? error,
     StackTrace? stackTrace,
-    Map<String, dynamic>? metaData,
+    Object? metaData,
   ]) =>
       log(Level.SEVERE, message, error, stackTrace, null, metaData);
 
@@ -339,7 +339,7 @@ class Logger {
     Object? message, [
     Object? error,
     StackTrace? stackTrace,
-    Map<String, dynamic>? metaData,
+    Object? metaData,
   ]) =>
       log(Level.SHOUT, message, error, stackTrace, null, metaData);
 

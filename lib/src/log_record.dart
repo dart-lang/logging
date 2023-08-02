@@ -14,7 +14,7 @@ class LogRecord {
   final String message;
 
   /// Meta Data to pass additional information
-  final Map<String, dynamic>? metaData;
+  final Object? metaData;
 
   /// Non-string message passed to Logger.
   final Object? object;
