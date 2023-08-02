@@ -1,3 +1,13 @@
+## 1.2.0
+
+* Add notification when the log level is changed. Logger `onLevelChanged` broadcasts a stream of level values.
+* Require Dart 2.19.
+
+## 1.1.1
+
+* Add a check that throws if a logger name ends with '.'.
+* Require Dart 2.18
+
 ## 1.1.0
 
 * Add `Logger.attachedLoggers` which exposes all loggers created with the

@@ -2,8 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-library logging_test;
-
 import 'dart:async';
 
 import 'package:logging/logging.dart';
@@ -13,26 +11,26 @@ void main() {
   final hierarchicalLoggingEnabledDefault = hierarchicalLoggingEnabled;
 
   test('level comparison is a valid comparator', () {
-    var level1 = const Level('NOT_REAL1', 253);
+    const level1 = Level('NOT_REAL1', 253);
     expect(level1 == level1, isTrue);
     expect(level1 <= level1, isTrue);
     expect(level1 >= level1, isTrue);
     expect(level1 < level1, isFalse);
     expect(level1 > level1, isFalse);
 
-    var level2 = const Level('NOT_REAL2', 455);
+    const level2 = Level('NOT_REAL2', 455);
     expect(level1 <= level2, isTrue);
     expect(level1 < level2, isTrue);
     expect(level2 >= level1, isTrue);
     expect(level2 > level1, isTrue);
 
-    var level3 = const Level('NOT_REAL3', 253);
+    const level3 = Level('NOT_REAL3', 253);
     expect(level1, isNot(same(level3))); // different instances
     expect(level1, equals(level3)); // same value.
   });
 
   test('default levels are in order', () {
-    final levels = Level.LEVELS;
+    const levels = Level.LEVELS;
 
     for (var i = 0; i < levels.length; i++) {
       for (var j = i + 1; j < levels.length; j++) {
@@ -55,7 +53,7 @@ void main() {
       Level.SEVERE,
     ];
 
-    final sorted = Level.LEVELS;
+    const sorted = Level.LEVELS;
 
     expect(unsorted, isNot(orderedEquals(sorted)));
 
@@ -64,7 +62,7 @@ void main() {
   });
 
   test('levels are hashable', () {
-    var map = <Level, String>{};
+    final map = <Level, String>{};
     map[Level.INFO] = 'info';
     map[Level.SHOUT] = 'shout';
     expect(map[Level.INFO], same('info'));
@@ -75,6 +73,11 @@ void main() {
     expect(() => Logger('.c'), throwsArgumentError);
   });
 
+  test('logger name cannot end with a "."', () {
+    expect(() => Logger('a.'), throwsArgumentError);
+    expect(() => Logger('a..d'), throwsArgumentError);
+  });
+
   test('root level has proper defaults', () {
     expect(Logger.root, isNotNull);
     expect(Logger.root.parent, null);
@@ -82,7 +85,7 @@ void main() {
   });
 
   test('logger naming is hierarchical', () {
-    var c = Logger('a.b.c');
+    final c = Logger('a.b.c');
     expect(c.name, equals('c'));
     expect(c.parent!.name, equals('b'));
     expect(c.parent!.parent!.name, equals('a'));
@@ -91,7 +94,7 @@ void main() {
   });
 
   test('logger full name', () {
-    var c = Logger('a.b.c');
+    final c = Logger('a.b.c');
     expect(c.fullName, equals('a.b.c'));
     expect(c.parent!.fullName, equals('a.b'));
     expect(c.parent!.parent!.fullName, equals('a'));
@@ -100,9 +103,9 @@ void main() {
   });
 
   test('logger parent-child links are correct', () {
-    var a = Logger('a');
-    var b = Logger('a.b');
-    var c = Logger('a.c');
+    final a = Logger('a');
+    final b = Logger('a.b');
+    final c = Logger('a.c');
     expect(a, same(b.parent));
     expect(a, same(c.parent));
     expect(a.children['b'], same(b));
@@ -110,10 +113,10 @@ void main() {
   });
 
   test('loggers are singletons', () {
-    var a1 = Logger('a');
-    var a2 = Logger('a');
-    var b = Logger('a.b');
-    var root = Logger.root;
+    final a1 = Logger('a');
+    final a2 = Logger('a');
+    final b = Logger('a.b');
+    final root = Logger.root;
     expect(a1, same(a2));
     expect(a1, same(b.parent));
     expect(root, same(a1.parent));
@@ -121,8 +124,8 @@ void main() {
   });
 
   test('cannot directly manipulate Logger.children', () {
-    var loggerAB = Logger('a.b');
-    var loggerA = loggerAB.parent!;
+    final loggerAB = Logger('a.b');
+    final loggerA = loggerAB.parent!;
 
     expect(loggerA.children['b'], same(loggerAB), reason: 'can read Children');
 
@@ -134,9 +137,9 @@ void main() {
   test('stackTrace gets throw to LogRecord', () {
     Logger.root.level = Level.INFO;
 
-    var records = <LogRecord>[];
+    final records = <LogRecord>[];
 
-    var sub = Logger.root.onRecord.listen(records.add);
+    final sub = Logger.root.onRecord.listen(records.add);
 
     try {
       throw UnsupportedError('test exception');
@@ -151,17 +154,17 @@ void main() {
 
     expect(records, hasLength(3));
 
-    var severe = records[0];
+    final severe = records[0];
     expect(severe.message, 'severe');
     expect(severe.error is UnsupportedError, isTrue);
     expect(severe.stackTrace is StackTrace, isTrue);
 
-    var warning = records[1];
+    final warning = records[1];
     expect(warning.message, 'warning');
     expect(warning.error is UnsupportedError, isTrue);
     expect(warning.stackTrace is StackTrace, isTrue);
 
-    var shout = records[2];
+    final shout = records[2];
     expect(shout.message, 'shout');
     expect(shout.error, isNull);
     expect(shout.stackTrace, isNull);
@@ -169,10 +172,10 @@ void main() {
 
   group('zone gets recorded to LogRecord', () {
     test('root zone', () {
-      var root = Logger.root;
+      final root = Logger.root;
 
-      var recordingZone = Zone.current;
-      var records = <LogRecord>[];
+      final recordingZone = Zone.current;
+      final records = <LogRecord>[];
       root.onRecord.listen(records.add);
       root.info('hello');
 
@@ -181,10 +184,10 @@ void main() {
     });
 
     test('child zone', () {
-      var root = Logger.root;
+      final root = Logger.root;
 
       late Zone recordingZone;
-      var records = <LogRecord>[];
+      final records = <LogRecord>[];
       root.onRecord.listen(records.add);
 
       runZoned(() {
@@ -197,10 +200,10 @@ void main() {
     });
 
     test('custom zone', () {
-      var root = Logger.root;
+      final root = Logger.root;
 
       late Zone recordingZone;
-      var records = <LogRecord>[];
+      final records = <LogRecord>[];
       root.onRecord.listen(records.add);
 
       runZoned(() {
@@ -221,9 +224,9 @@ void main() {
     });
 
     test('create new instances of Logger', () {
-      var a1 = Logger.detached('a');
-      var a2 = Logger.detached('a');
-      var a = Logger('a');
+      final a1 = Logger.detached('a');
+      final a2 = Logger.detached('a');
+      final a = Logger('a');
 
       expect(a1, isNot(a2));
       expect(a1, isNot(a));
@@ -231,12 +234,12 @@ void main() {
     });
 
     test('parent is null', () {
-      var a = Logger.detached('a');
+      final a = Logger.detached('a');
       expect(a.parent, null);
     });
 
     test('children is empty', () {
-      var a = Logger.detached('a');
+      final a = Logger.detached('a');
       expect(a.children, {});
     });
 
@@ -287,12 +290,12 @@ void main() {
   });
 
   group('mutating levels', () {
-    var root = Logger.root;
-    var a = Logger('a');
-    var b = Logger('a.b');
-    var c = Logger('a.b.c');
-    var d = Logger('a.b.c.d');
-    var e = Logger('a.b.c.d.e');
+    final root = Logger.root;
+    final a = Logger('a');
+    final b = Logger('a.b');
+    final c = Logger('a.b.c');
+    final d = Logger('a.b.c.d');
+    final e = Logger('a.b.c.d.e');
 
     setUp(() {
       hierarchicalLoggingEnabled = true;
@@ -406,7 +409,7 @@ void main() {
 
     test('logging methods store appropriate level', () {
       root.level = Level.ALL;
-      var rootMessages = [];
+      final rootMessages = [];
       root.onRecord.listen((record) {
         rootMessages.add('${record.level}: ${record.message}');
       });
@@ -436,7 +439,7 @@ void main() {
 
     test('logging methods store exception', () {
       root.level = Level.ALL;
-      var rootMessages = [];
+      final rootMessages = [];
       root.onRecord.listen((r) {
         rootMessages.add('${r.level}: ${r.message} ${r.error}');
       });
@@ -482,9 +485,9 @@ void main() {
 
     test('message logging - no hierarchy', () {
       root.level = Level.WARNING;
-      var rootMessages = [];
-      var aMessages = [];
-      var cMessages = [];
+      final rootMessages = [];
+      final aMessages = [];
+      final cMessages = [];
       c.onRecord.listen((record) {
         cMessages.add('${record.level}: ${record.message}');
       });
@@ -533,9 +536,9 @@ void main() {
 
       b.level = Level.WARNING;
 
-      var rootMessages = [];
-      var aMessages = [];
-      var cMessages = [];
+      final rootMessages = [];
+      final aMessages = [];
+      final cMessages = [];
       c.onRecord.listen((record) {
         cMessages.add('${record.level}: ${record.message}');
       });
@@ -599,7 +602,7 @@ void main() {
 
     test('message logging - lazy functions', () {
       root.level = Level.INFO;
-      var messages = [];
+      final messages = [];
       root.onRecord.listen((record) {
         messages.add('${record.level}: ${record.message}');
       });
@@ -621,9 +624,9 @@ void main() {
 
     test('message logging - calls toString', () {
       root.level = Level.INFO;
-      var messages = [];
-      var objects = [];
-      var object = Object();
+      final messages = [];
+      final objects = [];
+      final object = Object();
       root.onRecord.listen((record) {
         messages.add('${record.level}: ${record.message}');
         objects.add(record.object);
@@ -656,14 +659,14 @@ void main() {
   });
 
   group('recordStackTraceAtLevel', () {
-    var root = Logger.root;
+    final root = Logger.root;
     tearDown(() {
       recordStackTraceAtLevel = Level.OFF;
       root.clearListeners();
     });
 
     test('no stack trace by default', () {
-      var records = <LogRecord>[];
+      final records = <LogRecord>[];
       root.onRecord.listen(records.add);
       root.severe('hello');
       root.warning('hello');
@@ -675,7 +678,7 @@ void main() {
     });
 
     test('trace recorded only on requested levels', () {
-      var records = <LogRecord>[];
+      final records = <LogRecord>[];
       recordStackTraceAtLevel = Level.WARNING;
       root.onRecord.listen(records.add);
       root.severe('hello');
@@ -688,8 +691,8 @@ void main() {
     });
 
     test('provided trace is used if given', () {
-      var trace = StackTrace.current;
-      var records = <LogRecord>[];
+      final trace = StackTrace.current;
+      final records = <LogRecord>[];
       recordStackTraceAtLevel = Level.WARNING;
       root.onRecord.listen(records.add);
       root.severe('hello');
@@ -700,7 +703,7 @@ void main() {
     });
 
     test('error also generated when generating a trace', () {
-      var records = <LogRecord>[];
+      final records = <LogRecord>[];
       recordStackTraceAtLevel = Level.WARNING;
       root.onRecord.listen(records.add);
       root.severe('hello');
@@ -710,6 +713,33 @@ void main() {
       expect(records[0].error, isNotNull);
       expect(records[1].error, isNotNull);
       expect(records[2].error, isNull);
+    });
+
+    test('listen for level changed', () {
+      final levels = <Level?>[];
+      root.level = Level.ALL;
+      root.onLevelChanged.listen(levels.add);
+      root.level = Level.SEVERE;
+      root.level = Level.WARNING;
+      expect(levels, hasLength(2));
+    });
+
+    test('onLevelChanged is not emited if set the level to the same value', () {
+      final levels = <Level?>[];
+      root.level = Level.ALL;
+      root.onLevelChanged.listen(levels.add);
+      root.level = Level.ALL;
+      expect(levels, hasLength(0));
+    });
+
+    test('setting level in a loop throws state error', () {
+      root.level = Level.ALL;
+      root.onLevelChanged.listen((event) {
+        // Cannot fire new event. Controller is already firing an event
+        expect(() => root.level = Level.SEVERE, throwsStateError);
+      });
+      root.level = Level.WARNING;
+      expect(root.level, Level.SEVERE);
     });
   });
 }
