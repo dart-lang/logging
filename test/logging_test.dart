@@ -240,7 +240,7 @@ void main() {
 
     test('children is empty', () {
       final a = Logger.detached('a');
-      expect(a.children, {});
+      expect(a.children, <Object, Object>{});
     });
 
     test('have levels independent of the root level', () {
@@ -409,7 +409,7 @@ void main() {
 
     test('logging methods store appropriate level', () {
       root.level = Level.ALL;
-      final rootMessages = [];
+      final rootMessages = <String>[];
       root.onRecord.listen((record) {
         rootMessages.add('${record.level}: ${record.message}');
       });
@@ -439,7 +439,7 @@ void main() {
 
     test('logging methods store exception', () {
       root.level = Level.ALL;
-      final rootMessages = [];
+      final rootMessages = <String>[];
       root.onRecord.listen((r) {
         rootMessages.add('${r.level}: ${r.message} ${r.error}');
       });
@@ -485,9 +485,9 @@ void main() {
 
     test('message logging - no hierarchy', () {
       root.level = Level.WARNING;
-      final rootMessages = [];
-      final aMessages = [];
-      final cMessages = [];
+      final rootMessages = <String>[];
+      final aMessages = <String>[];
+      final cMessages = <String>[];
       c.onRecord.listen((record) {
         cMessages.add('${record.level}: ${record.message}');
       });
@@ -536,9 +536,9 @@ void main() {
 
       b.level = Level.WARNING;
 
-      final rootMessages = [];
-      final aMessages = [];
-      final cMessages = [];
+      final rootMessages = <String>[];
+      final aMessages = <String>[];
+      final cMessages = <String>[];
       c.onRecord.listen((record) {
         cMessages.add('${record.level}: ${record.message}');
       });
@@ -602,7 +602,7 @@ void main() {
 
     test('message logging - lazy functions', () {
       root.level = Level.INFO;
-      final messages = [];
+      final messages = <String>[];
       root.onRecord.listen((record) {
         messages.add('${record.level}: ${record.message}');
       });
@@ -624,8 +624,8 @@ void main() {
 
     test('message logging - calls toString', () {
       root.level = Level.INFO;
-      final messages = [];
-      final objects = [];
+      final messages = <String>[];
+      final objects = <Object?>[];
       final object = Object();
       root.onRecord.listen((record) {
         messages.add('${record.level}: ${record.message}');
