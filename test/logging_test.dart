@@ -690,6 +690,22 @@ void main() {
       expect(records[2].stackTrace, isNull);
     });
 
+    test('defaults a missing trace', () {
+      final records = <LogRecord>[];
+      recordStackTraceAtLevel = Level.SEVERE;
+      root.onRecord.listen(records.add);
+      root.severe('hello');
+      expect(records.single.stackTrace, isNotNull);
+    });
+
+    test('defaults an empty trace', () {
+      final records = <LogRecord>[];
+      recordStackTraceAtLevel = Level.SEVERE;
+      root.onRecord.listen(records.add);
+      root.severe('hello', 'error', StackTrace.empty);
+      expect(records.single.stackTrace, isNot(StackTrace.empty));
+    });
+
     test('provided trace is used if given', () {
       final trace = StackTrace.current;
       final records = <LogRecord>[];

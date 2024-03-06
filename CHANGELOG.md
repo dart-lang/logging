@@ -1,5 +1,6 @@
-## 1.2.1-wip
+## 1.3.0-wip
 
+* Override empty stack traces for trace level events.
 * Require Dart 3.2
 
 ## 1.2.0
