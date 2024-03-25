@@ -4,6 +4,7 @@
 
 import 'dart:async';
 import 'dart:collection';
+import 'dart:developer' as developer;
 
 import 'level.dart';
 import 'log_record.dart';
@@ -311,7 +312,19 @@ class Logger {
     }
   }
 
-  void _publish(LogRecord record) => _controller?.add(record);
+  void _publish(LogRecord record) {
+    developer.log(
+      record.message,
+      time: record.time,
+      sequenceNumber: record.sequenceNumber,
+      level: record.level.value,
+      name: record.loggerName,
+      zone: record.zone,
+      error: record.error,
+      stackTrace: record.stackTrace,
+    );
+    return _controller?.add(record);
+  }
 
   /// Top-level root [Logger].
   static final Logger root = Logger('');
