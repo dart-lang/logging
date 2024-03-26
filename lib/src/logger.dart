@@ -323,7 +323,7 @@ class Logger {
       error: record.error,
       stackTrace: record.stackTrace,
     );
-    return _controller?.add(record);
+   _controller?.add(record);
   }
 
   /// Top-level root [Logger].
