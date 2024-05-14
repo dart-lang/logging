@@ -4,6 +4,8 @@ description: >-
   Provides APIs for debugging and error logging, similar to loggers in other
   languages, such as the Closure JS Logger and java.util.logging.Logger.
 repository: https://github.com/dart-lang/logging
+topics:
+ - logging
 
 environment:
   sdk: ^3.2.0
