@@ -207,7 +207,7 @@ class Logger {
   /// [recordStackTraceAtLevel] and [stackTrace] is `null` or [StackTrace.empty]
   /// it will be defaulted to the current stack trace for this call.
   void log(Level logLevel, Object? message,
-      [Object? error, StackTrace? stackTrace, Zone? zone]) {
+      [Object? error, StackTrace? stackTrace, Zone? zone, Object? metaData]) {
     Object? object;
     if (isLoggable(logLevel)) {
       if (message is Function) {
@@ -229,8 +229,8 @@ class Logger {
       }
       zone ??= Zone.current;
 
-      final record =
-          LogRecord(logLevel, msg, fullName, error, stackTrace, zone, object);
+      final record = 
+          LogRecord(logLevel, msg, fullName, error, stackTrace, zone, object, metaData);
 
       if (parent == null) {
         _publish(record);
@@ -250,57 +250,65 @@ class Logger {
   ///
   /// See [log] for information on how non-String [message] arguments are
   /// handled.
-  void finest(Object? message, [Object? error, StackTrace? stackTrace]) =>
-      log(Level.FINEST, message, error, stackTrace);
+  void finest(Object? message,
+          [Object? error, StackTrace? stackTrace, Object? metaData]) =>
+      log(Level.FINEST, message, error, stackTrace, null, metaData);
 
   /// Log message at level [Level.FINER].
   ///
   /// See [log] for information on how non-String [message] arguments are
   /// handled.
-  void finer(Object? message, [Object? error, StackTrace? stackTrace]) =>
-      log(Level.FINER, message, error, stackTrace);
+  void finer(Object? message,
+          [Object? error, StackTrace? stackTrace, Object? metaData]) =>
+      log(Level.FINER, message, error, stackTrace, null, metaData);
 
   /// Log message at level [Level.FINE].
   ///
   /// See [log] for information on how non-String [message] arguments are
   /// handled.
-  void fine(Object? message, [Object? error, StackTrace? stackTrace]) =>
-      log(Level.FINE, message, error, stackTrace);
+  void fine(Object? message,
+          [Object? error, StackTrace? stackTrace, Object? metaData]) =>
+      log(Level.FINE, message, error, stackTrace, null, metaData);
 
   /// Log message at level [Level.CONFIG].
   ///
   /// See [log] for information on how non-String [message] arguments are
   /// handled.
-  void config(Object? message, [Object? error, StackTrace? stackTrace]) =>
-      log(Level.CONFIG, message, error, stackTrace);
+  void config(Object? message,
+          [Object? error, StackTrace? stackTrace, Object? metaData]) =>
+      log(Level.CONFIG, message, error, stackTrace, null, metaData);
 
   /// Log message at level [Level.INFO].
   ///
   /// See [log] for information on how non-String [message] arguments are
   /// handled.
-  void info(Object? message, [Object? error, StackTrace? stackTrace]) =>
-      log(Level.INFO, message, error, stackTrace);
+  void info(Object? message,
+          [Object? error, StackTrace? stackTrace, Object? metaData]) =>
+      log(Level.INFO, message, error, stackTrace, null, metaData);
 
   /// Log message at level [Level.WARNING].
   ///
   /// See [log] for information on how non-String [message] arguments are
   /// handled.
-  void warning(Object? message, [Object? error, StackTrace? stackTrace]) =>
-      log(Level.WARNING, message, error, stackTrace);
+  void warning(Object? message,
+          [Object? error, StackTrace? stackTrace, Object? metaData]) =>
+      log(Level.WARNING, message, error, stackTrace, null, metaData);
 
   /// Log message at level [Level.SEVERE].
   ///
   /// See [log] for information on how non-String [message] arguments are
   /// handled.
-  void severe(Object? message, [Object? error, StackTrace? stackTrace]) =>
-      log(Level.SEVERE, message, error, stackTrace);
+  void severe(Object? message,
+          [Object? error, StackTrace? stackTrace, Object? metaData]) =>
+      log(Level.SEVERE, message, error, stackTrace, null, metaData);
 
   /// Log message at level [Level.SHOUT].
   ///
   /// See [log] for information on how non-String [message] arguments are
   /// handled.
-  void shout(Object? message, [Object? error, StackTrace? stackTrace]) =>
-      log(Level.SHOUT, message, error, stackTrace);
+  void shout(Object? message,
+          [Object? error, StackTrace? stackTrace, Object? metaData]) =>
+      log(Level.SHOUT, message, error, stackTrace, null, metaData);
 
   Stream<LogRecord> _getStream() {
     if (hierarchicalLoggingEnabled || parent == null) {
