@@ -108,34 +108,30 @@ their `onRecord` streams.
   });
 
 
-  // Will NOT print because FINER is too low level for `Logger.root`.
+  // Will NOT print because FINER is too low level for ([LOG1] & [ROOT]).
   log1.finer('LOG_01 FINER (X)');
 
-  // Will print twice ([LOG1] & [ROOT])
-  log1.fine('LOG_01 FINE (√√)');
+  // Will print ONCE by [LOG1] because FINE is too low level for [ROOT].
+  log1.fine('LOG_01 FINE (√)');
 
-  // Will print ONCE because `log1` only uses root listener.
-  log1.warning('LOG_01 WARNING (√)');
+  // Will print twice ([LOG1] & [ROOT]) because warning is sufficient for all
+  // loggers' levels.
+  log1.warning('LOG_01 WARNING (√√)');
 
-  // Will never print because FINE is too low level.
+  // Will NOT print because FINE is too low level for ([LOG1] & [ROOT]).
   log2.fine('LOG_02 FINE (X)');
 
   // Will print twice ([LOG2] & [ROOT]) because warning is sufficient for all
   // loggers' levels.
   log2.warning('LOG_02 WARNING (√√)');
-
-  // Will never print because `info` is filtered by `Logger.root.level` of
-  // `Level.WARNING`.
-  log2.info('INFO (X)');
 ```
 
 Results in:
 
 ```
-[LOG1][FINE+] LOG_01 FINE (√√)
-[ROOT][WARNING+] LOG_01 FINE (√√)
-[LOG1][FINE+] LOG_01 WARNING (√)
-[ROOT][WARNING+] LOG_01 WARNING (√)
+[LOG1][FINE+] LOG_01 FINE (√)
+[LOG1][FINE+] LOG_01 WARNING (√√)
+[ROOT][WARNING+] LOG_01 WARNING (√√)
 [LOG2][WARNING+] LOG_02 WARNING (√√)
 [ROOT][WARNING+] LOG_02 WARNING (√√)
 ```
