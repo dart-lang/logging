@@ -33,7 +33,7 @@ First, set the root `Level`. All messages at or above the current level are sent
 Then, listen on the `onRecord` stream for `LogRecord` events. The `LogRecord`
 class has various properties for the message, error, logger name, and more.
 
-To listen for changed level notitfications use:
+To listen for changed level notifications use:
 
 ```dart
 Logger.root.onLevelChanged.listen((level) {
